@@ -1,4 +1,4 @@
-# 🌿 GreenLink
+# 🥦 GreenLink
 
 **GreenLink** é uma aplicação desenvolvida em **Python** por 
 **Paulo Campello**
