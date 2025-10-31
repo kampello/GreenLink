@@ -4,9 +4,9 @@ conn = sqlite3.connect("data/greenlink.db")
 cursor = conn.cursor()
 
 cursor.executemany("INSERT INTO utilizadores (nome, tipo, senha) VALUES (?, ?, ?)", [
-    ("Kampello", "admin", "1234"),
-    ("Maria", "cliente", "abcd"),
-    ("João", "fornecedor", "xyz")
+    ("admin", "admin", "1234"),
+    ("paul", "cliente", "123"),
+    ("camp", "fornecedor", "123")
 ])
 
 cursor.executemany("INSERT INTO produtos (nome, preco, stock) VALUES (?, ?, ?)", [

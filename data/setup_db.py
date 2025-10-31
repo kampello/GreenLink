@@ -36,4 +36,4 @@ CREATE TABLE IF NOT EXISTS pedidos (
 conn.commit()
 conn.close()
 
-print("✅ Base de dados criada com sucesso!")
+print("Base de dados criada com sucesso!")
