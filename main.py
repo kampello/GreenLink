@@ -1,5 +1,8 @@
 # GreenLink - Sistema de Gestão de Vegetais com SQLite
 import sqlite3
+from classes.admin import Admin
+
+tipo_user = "admin"
 
 def conectar():
     return sqlite3.connect("data/greenlink.db")
@@ -17,8 +20,13 @@ def login():
         conn.close()
 
         if user:
+
             print(f"Bem-vindo, {nome}! Tipo de utilizador: {user[0].capitalize()}")
-            break
+            nova_conect = conectar()
+            if tipo_user == "admin":
+                admin = Admin(nova_conect)
+                admin.menu()
+            break # parar while true
         else:
             print("Credenciais inválidas.")
 

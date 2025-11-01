@@ -5,8 +5,9 @@ __pycache__/
 *.pyd
 *.log
 
-# --- SQLite database --- # nossa db 
-*.db 
+# --- SQLite database ---
+# (A base de dados local não deve ser versionada)
+*.db
 *.sqlite3
 
 # --- Virtual environments ---
@@ -22,6 +23,6 @@ env/
 .DS_Store
 Thumbs.db
 
-# --- Testes e backups ---possiveis backs que possa salvar..
-*.bak .
+# --- Testes e backups ---
+*.bak
 *.tmp
