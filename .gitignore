@@ -1,0 +1,27 @@
+# --- Python ---
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.log
+
+# --- SQLite database --- # nossa db 
+*.db 
+*.sqlite3
+
+# --- Virtual environments ---
+venv/
+env/
+
+# --- IDE / Editor ---
+.vscode/
+.idea/
+*.code-workspace
+
+# --- Sistema ---
+.DS_Store
+Thumbs.db
+
+# --- Testes e backups ---possiveis backs que possa salvar..
+*.bak .
+*.tmp
