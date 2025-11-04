@@ -2,6 +2,7 @@
 import sqlite3
 from classes.admin import Admin
 from classes.cliente import Cliente
+from classes.fornecedor import Fornecedor
 
 
 
@@ -31,11 +32,14 @@ def login():
             elif tipo_user =="cliente":
                 cliente = Cliente(nova_conect)
                 cliente.menu()
+            elif tipo_user == "fornecedor":
+                fornecedor = Fornecedor(nova_conect, nome)
+                fornecedor.menu()
             break # parar while true
             
         else:
             print("Credenciais inválidas.")
 
-if __name__ == "__main__":
+if __name__ == "__main__": 
     print("=== GreenLink ===")
     login()
