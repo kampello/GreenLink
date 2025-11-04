@@ -2,7 +2,7 @@
 import sqlite3
 from classes.admin import Admin
 
-tipo_user = "admin"
+
 
 def conectar():
     return sqlite3.connect("data/greenlink.db")
@@ -18,10 +18,11 @@ def login():
         cursor.execute("SELECT tipo FROM utilizadores WHERE nome=? AND senha=?", (nome, senha))
         user = cursor.fetchone()
         conn.close()
-
+        
         if user:
-
+            tipo_user = user[0].lower()
             print(f"Bem-vindo, {nome}! Tipo de utilizador: {user[0].capitalize()}")
+            
             nova_conect = conectar()
             if tipo_user == "admin":
                 admin = Admin(nova_conect)

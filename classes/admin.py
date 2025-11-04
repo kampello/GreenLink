@@ -1,3 +1,6 @@
+from admin_tools.user_manager import criar_utilizador, apagar_utilizador, pesquisar_utilizador
+from admin_tools.product_manager import adicionar_produto, remover_produto, ver_stock, ver_informacoes_produtos
+
 class Admin:
     def __init__(self, db_connection):
         self.db = db_connection
@@ -37,22 +40,21 @@ class Admin:
                 print("Opção inválida, tente novamente.")
 
     def criar_utilizador(self):
-        print("→ Função criar_utilizador() ainda não implementada.")
+        criar_utilizador(self.db)
 
     def apagar_utilizador(self):
-        print("→ Função apagar_utilizador() ainda não implementada.")
+        apagar_utilizador(self.db)
 
     def pesquisar_utilizador(self):
-        print("→ Função pesquisar_utilizador() ainda não implementada.")
+        pesquisar_utilizador(self.db)
 
     def adicionar_produto(self):
-        print("→ Função adicionar_produto() ainda não implementada.")
+        adicionar_produto(self.db)
 
     def remover_produto(self):
-        print("→ Função remover_produto() ainda não implementada.")
-
+        remover_produto(self.db)
     def ver_stock(self):
-        print("→ Função ver_stock() ainda não implementada.")
+        ver_stock(self.db)
 
     def ver_informacoes_produtos(self):
-        print("→ Função ver_informacoes_produtos() ainda não implementada.")
+        ver_informacoes_produtos(self.db)
