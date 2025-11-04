@@ -1,6 +1,7 @@
 # GreenLink - Sistema de Gestão de Vegetais com SQLite
 import sqlite3
 from classes.admin import Admin
+from classes.cliente import Cliente
 
 
 
@@ -27,7 +28,11 @@ def login():
             if tipo_user == "admin":
                 admin = Admin(nova_conect)
                 admin.menu()
+            elif tipo_user =="cliente":
+                cliente = Cliente(nova_conect)
+                cliente.menu()
             break # parar while true
+            
         else:
             print("Credenciais inválidas.")
 
