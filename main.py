@@ -1,5 +1,5 @@
 # GreenLink - Sistema de Gestão de Vegetais com SQLite
-import sqlite3
+import sqlite3, os, getpass
 from classes.admin import Admin
 from classes.cliente import Cliente
 from classes.fornecedor import Fornecedor
@@ -9,11 +9,24 @@ from classes.fornecedor import Fornecedor
 def conectar():
     return sqlite3.connect("data/greenlink.db")
 
+clear = lambda: os.system('clear')
+logo = lambda: print(''' 
+  _____                     _      _       _    
+ / ____|                   | |    (_)     | |   
+| |  __ _ __ ___  ___ _ __ | |     _ _ __ | | __
+| | |_ | '__/ _ \/ _ \ '_ \| |    | | '_ \| |/ /
+| |__| | | |  __/  __/ | | | |____| | | | |   < 
+ \_____|_|  \___|\___|_| |_|______|_|_| |_|_|\_\\
+      we love broccoli™
+''')
+clear()
+logo()
 def login():
     while True:
         print("=== LOGIN ===")
         nome = input("Nome: ")
-        senha = input("Senha: ")
+        senha = getpass.getpass("Senha: ")
+
 
         conn = conectar()
         cursor = conn.cursor()
@@ -23,8 +36,11 @@ def login():
         
         if user:
             tipo_user = user[0].lower()
-            print(f"Bem-vindo, {nome}! Tipo de utilizador: {user[0].capitalize()}")
             
+            #desabilitar caso nao queiras que o cosole limpe
+            clear()
+            logo()
+            print(f"Bem-vindo, {nome}! Tipo de utilizador: {user[0].capitalize()}")
             nova_conect = conectar()
             if tipo_user == "admin":
                 admin = Admin(nova_conect)
@@ -41,5 +57,4 @@ def login():
             print("Credenciais inválidas.")
 
 if __name__ == "__main__": 
-    print("=== GreenLink ===")
     login()
