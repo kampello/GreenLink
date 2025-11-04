@@ -9,10 +9,15 @@ class Fornecedor:
     def menu(self):
         while True:
             print("\n===== Painel do Fornecedor =====")
-            print("1. Ver pedidos recebidos")
+            print("(Não Funciona)")
+            print("1. Ver pedidos recebidos ")
+            print(" (Funciona menos a parte de adicionar novos produtos)")
             print("2. Atualizar stock de produtos")
+            print("(Falta mostrar o preço)")
             print("3. Ver stock atual")
+            print("(Não Funciona)")
             print("4. Enviar mensagem ao cliente")
+            print("(Não Funciona)")
             print("5. Ver mensagens recebidas")
             print("0. Sair")
 
