@@ -1,5 +1,5 @@
-from cliente_tools.pedidos import ver_pedidos, fazer_pedido, ver_produtos_disponiveis
-from cliente_tools.comunicacao import enviar_mensagem, ver_mensagens
+from tools.cliente_tools.pedidos import ver_pedidos, fazer_pedido, ver_produtos_disponiveis
+from tools.cliente_tools.comunicacao import enviar_mensagem, ver_mensagens
 
 class Cliente:
     def __init__(self, db_connection):

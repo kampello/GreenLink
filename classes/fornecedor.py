@@ -1,5 +1,5 @@
-from fornecedor_tools.stock import ver_stock, atualizar_stock, ver_pedidos_recebidos
-from fornecedor_tools.comunicacao import enviar_mensagem, ver_mensagens
+from tools.fornecedor_tools.stock import ver_stock, atualizar_stock, ver_pedidos_recebidos
+from tools.fornecedor_tools.comunicacao import enviar_mensagem, ver_mensagens
 
 class Fornecedor:
     def __init__(self, db_connection, nome):

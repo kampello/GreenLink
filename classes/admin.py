@@ -1,5 +1,5 @@
-from admin_tools.user_manager import criar_utilizador, apagar_utilizador, pesquisar_utilizador
-from admin_tools.product_manager import adicionar_produto, remover_produto, ver_stock, ver_informacoes_produtos
+from tools.admin_tools.user_manager import criar_utilizador, apagar_utilizador, pesquisar_utilizador
+from tools.admin_tools.product_manager import adicionar_produto, remover_produto, ver_stock, ver_informacoes_produtos
 
 class Admin:
     def __init__(self, db_connection):
