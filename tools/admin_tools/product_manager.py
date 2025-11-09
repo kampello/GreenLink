@@ -26,18 +26,26 @@ def remover_produto(db):
         print(f" Produto '{nome}' removido.")
     else:
         print(" Produto não encontrado.")
-
+#funcao para ver na base de dados os stock 
 def ver_stock(db):
     cursor = db.cursor()
-    cursor.execute("SELECT nome, stock FROM produtos")
+    cursor.execute("SELECT nome, preco, stock FROM produtos ORDER BY nome")
     produtos = cursor.fetchall()
 
     if produtos:
-        print("\n Stock Atual:")
-        for p in produtos:
-            print(f"{p[0]} — {p[1]} unidades")
+        print("\nStock Atual dos Produtos:\n")
+        print(f"{'Produto':<20} {'Preço (€)':<10} {'Stock':<6} {'Status'}")
+        print("-" * 50)
+
+        for nome, preco, stock in produtos:
+            status = "Baixo" if stock <= 5 else "OK"
+            print(f"{nome:<20} {preco:<10.2f} {stock:<6} {status}")
+
+        total_produtos = sum([p[2] for p in produtos])
+        print(f"\nTotal de produtos em stock: {total_produtos}")
     else:
-        print(" Nenhum produto registado.")
+        print("Nenhum produto registado.")
+
 
 def ver_informacoes_produtos(db):
     cursor = db.cursor()

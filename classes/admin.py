@@ -30,6 +30,7 @@ class Admin:
             elif opcao == "5":
                 self.remover_produto()
             elif opcao == "6":
+                
                 self.ver_stock()
             elif opcao == "7":
                 self.ver_informacoes_produtos()
