@@ -34,4 +34,5 @@ class Fornecedor:
                 print(" Saindo do painel do fornecedor...")
                 break
             else:
-                print(" Opção inválida, tente novamente.")
+                print(" Opção inválida, tente novamente ee.")
+            
