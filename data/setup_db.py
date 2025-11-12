@@ -39,7 +39,7 @@ def verificar_tickets_pendentes(db):
     tickets = cursor.fetchall()
 
     if tickets:
-        print("\n📌 Tickets pendentes de aprovação:")
+        print("\nTickets pendentes de aprovação:")
         for t in tickets:
             print(f"ID: {t[0]} | Fornecedor: {t[1]} | Produto: {t[2]} | Preço: €{t[3]:.2f} | Stock: {t[4]}")
         print("Aguarda aprovação do admin...\n")
