@@ -1,21 +1,64 @@
 import sqlite3
 
-conn = sqlite3.connect("data/greenlink.db")
-cursor = conn.cursor()
+def inserir_dados_teste():
+    conn = sqlite3.connect("data/greenlink.db")
+    cursor = conn.cursor()
 
-cursor.executemany("INSERT INTO utilizadores (nome, tipo, senha) VALUES (?, ?, ?)", [
-    ("admin", "admin", "1234"),
-    ("paul", "cliente", "123"),
-    ("camp", "fornecedor", "123")
-])
+    print("🌿 Inserindo dados de teste...")
 
-cursor.executemany("INSERT INTO produtos (nome, preco, stock) VALUES (?, ?, ?)", [
-    ("Brócolos", 2.5, 100),
-    ("Cenouras", 1.2, 200),
-    ("Alfaces", 1.8, 150)
-])
+    # === Inserir utilizadores (admins e clientes) ===
+    utilizadores = [
+        ("AdminMaster", "admin", "1234"),
+        ("Joana", "cliente", "joana123"),
+        ("Carlos", "cliente", "carlos123"),
+    ]
+    cursor.executemany(
+        "INSERT INTO utilizadores (nome, tipo, senha) VALUES (?, ?, ?)",
+        utilizadores
+    )
 
-conn.commit()
-conn.close()
+    # === Inserir fornecedores ===
+    fornecedores = [
+        ("HortaVerde", "horta@greenlink.pt", "horta123"),
+        ("AgroVale", "agro@greenlink.pt", "agro123"),
+        ("CampoDourado", "campo@greenlink.pt", "campo123"),
+    ]
+    cursor.executemany(
+        "INSERT INTO fornecedores (nome, contacto, senha) VALUES (?, ?, ?)",
+        fornecedores
+    )
 
-print("🌱 Dados de teste inseridos com sucesso!")
+    # Obter IDs dos fornecedores
+    cursor.execute("SELECT id, nome FROM fornecedores")
+    fornecedores_dict = {nome: fid for fid, nome in cursor.fetchall()}
+
+    # === Inserir produtos por fornecedor ===
+    produtos = [
+        ("Tomates Frescos", 2.50, 120, fornecedores_dict["HortaVerde"]),
+        ("Alfaces", 1.80, 85, fornecedores_dict["HortaVerde"]),
+        ("Cenouras Doces", 1.20, 150, fornecedores_dict["AgroVale"]),
+        ("Batatas Douradas", 2.00, 200, fornecedores_dict["AgroVale"]),
+        ("Cebolas Roxas", 1.75, 95, fornecedores_dict["CampoDourado"]),
+    ]
+    cursor.executemany(
+        "INSERT INTO produtos (nome, preco, stock, fornecedor_id) VALUES (?, ?, ?, ?)",
+        produtos
+    )
+
+    # === Inserir pedidos de teste ===
+    cursor.execute("SELECT id FROM utilizadores WHERE nome='Joana'")
+    joana_id = cursor.fetchone()[0]
+    cursor.execute("SELECT id FROM produtos WHERE nome='Tomates Frescos'")
+    tomate_id = cursor.fetchone()[0]
+    cursor.execute(
+        "INSERT INTO pedidos (cliente_id, produto_id, quantidade, estado) VALUES (?, ?, ?, ?)",
+        (joana_id, tomate_id, 10, "feito")
+    )
+
+    conn.commit()
+    conn.close()
+    print("✅ Dados de teste inseridos com sucesso!")
+
+
+if __name__ == "__main__":
+    inserir_dados_teste()

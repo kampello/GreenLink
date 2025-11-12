@@ -1,39 +1,70 @@
 import sqlite3
 
-conn = sqlite3.connect("data/greenlink.db")
-cursor = conn.cursor()
+def resetar_banco():
+    conn = sqlite3.connect("data/greenlink.db")
+    cursor = conn.cursor()
 
-cursor.execute('''
-CREATE TABLE IF NOT EXISTS utilizadores (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    nome TEXT NOT NULL,
-    tipo TEXT CHECK(tipo IN ('admin','cliente','fornecedor')) NOT NULL,
-    senha TEXT NOT NULL
-);
-''')
+    print("🔄 A apagar tabelas antigas...")
 
-cursor.execute('''
-CREATE TABLE IF NOT EXISTS produtos (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    nome TEXT NOT NULL,
-    preco REAL NOT NULL,
-    stock INTEGER NOT NULL
-);
-''')
+    # Remove todas as tabelas antigas, se existirem
+    cursor.executescript("""
+    DROP TABLE IF EXISTS pedidos;
+    DROP TABLE IF EXISTS produtos;
+    DROP TABLE IF EXISTS fornecedores;
+    DROP TABLE IF EXISTS utilizadores;
+    """)
 
-cursor.execute('''
-CREATE TABLE IF NOT EXISTS pedidos (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    cliente_id INTEGER,
-    produto_id INTEGER,
-    quantidade INTEGER,
-    estado TEXT CHECK(estado IN ('feito','pago','enviado','entregue')) DEFAULT 'feito',
-    FOREIGN KEY (cliente_id) REFERENCES utilizadores(id),
-    FOREIGN KEY (produto_id) REFERENCES produtos(id)
-);
-''')
+    print("🧱 A recriar estrutura de tabelas...")
 
-conn.commit()
-conn.close()
+    # === Tabela de utilizadores ===
+    cursor.execute('''
+    CREATE TABLE utilizadores (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        nome TEXT UNIQUE NOT NULL,
+        tipo TEXT CHECK(tipo IN ('admin','cliente')) NOT NULL,
+        senha TEXT NOT NULL
+    );
+    ''')
 
-print("Base de dados criada com sucesso!")
+    # === Tabela de fornecedores ===
+    cursor.execute('''
+    CREATE TABLE fornecedores (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        nome TEXT UNIQUE NOT NULL,
+        contacto TEXT,
+        senha TEXT NOT NULL
+    );
+    ''')
+
+    # === Tabela de produtos ===
+    cursor.execute('''
+    CREATE TABLE produtos (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        nome TEXT NOT NULL,
+        preco REAL NOT NULL,
+        stock INTEGER NOT NULL,
+        fornecedor_id INTEGER NOT NULL,
+        FOREIGN KEY (fornecedor_id) REFERENCES fornecedores(id)
+    );
+    ''')
+
+    # === Tabela de pedidos ===
+    cursor.execute('''
+    CREATE TABLE pedidos (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        cliente_id INTEGER,
+        produto_id INTEGER,
+        quantidade INTEGER,
+        estado TEXT CHECK(estado IN ('feito','pago','enviado','entregue')) DEFAULT 'feito',
+        FOREIGN KEY (cliente_id) REFERENCES utilizadores(id),
+        FOREIGN KEY (produto_id) REFERENCES produtos(id)
+    );
+    ''')
+
+    conn.commit()
+    conn.close()
+    print("✅ Banco de dados limpo e recriado com sucesso!")
+
+
+if __name__ == "__main__":
+    resetar_banco()
