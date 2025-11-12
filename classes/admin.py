@@ -1,12 +1,14 @@
 from tools.admin_tools.user_manager import criar_utilizador, apagar_utilizador, pesquisar_utilizador
-from tools.admin_tools.product_manager import adicionar_produto, remover_produto, ver_stock, ver_informacoes_produtos
+from tools.admin_tools.product_manager import *
 
 class Admin:
     def __init__(self, db_connection):
         self.db = db_connection
 
     def menu(self):
+        
         while True:
+            self.verificar_tickets_pendentes()
             print("\n===== Painel de Administração =====")
             print("1. Criar utilizador")
             print("2. Apagar utilizador")
@@ -15,6 +17,7 @@ class Admin:
             print("5. Remover produto")
             print("6. Ver stock")
             print("7. Ver informações de produtos")
+            print("8. Aprovar / Negar Ticket")
             print("0. Sair")
 
             opcao = input("Escolha uma opção: ")
@@ -33,11 +36,19 @@ class Admin:
                 self.ver_stock()
             elif opcao == "7":
                 self.ver_informacoes_produtos()
+            elif opcao == "8":
+                    self.aprovar_ticket()
             elif opcao == "0":
                 print("Saindo do painel de administração...")
                 break
             else:
                 print("Opção inválida, tente novamente.")
+    def verificar_tickets_pendentes(self):
+        verificar_tickets_pendentes(self.db)
+
+    def aprovar_ticket(self):
+        aprovar_ticket(self.db)
+
 
     def criar_utilizador(self):
         criar_utilizador(self.db)

@@ -24,3 +24,18 @@ def ver_mensagens(db, fornecedor_nome):
             print(f"De {m[0]}: {m[1]}")
     else:
         print(" Nenhuma mensagem nova.")
+
+#abrir um ticket quando o admin fizer login
+def abrir_ticket_produto(db, fornecedor_nome):
+    nome_produto = input("Nome do produto: ")
+    preco = float(input("Preço sugerido: "))
+    stock = int(input("Quantidade inicial: "))
+
+    cursor = db.cursor()
+    cursor.execute("""
+        INSERT INTO tickets_produto (fornecedor, produto, preco, stock, status)
+        VALUES (?, ?, ?, ?, ?)
+    """, (fornecedor_nome, nome_produto, preco, stock, "pendente"))
+    db.commit()
+
+    print(f"Ticket para '{nome_produto}' enviado ao admin.")
