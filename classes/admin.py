@@ -17,6 +17,7 @@ class Admin:
             print("5. Remover produto")
             print("6. Ver stock")
             print("7. Ver informações de produtos")
+            print("8. Aprovar / Negar Ticket")
             print("0. Sair")
 
             opcao = input("Escolha uma opção: ")
@@ -32,10 +33,11 @@ class Admin:
             elif opcao == "5":
                 self.remover_produto()
             elif opcao == "6":
-                
                 self.ver_stock()
             elif opcao == "7":
                 self.ver_informacoes_produtos()
+            elif opcao == "8":
+                    self.aprovar_ticket()
             elif opcao == "0":
                 print("Saindo do painel de administração...")
                 break
@@ -43,6 +45,10 @@ class Admin:
                 print("Opção inválida, tente novamente.")
     def verificar_tickets_pendentes(self):
         verificar_tickets_pendentes(self.db)
+
+    def aprovar_ticket(self):
+        aprovar_ticket(self.db)
+
 
     def criar_utilizador(self):
         criar_utilizador(self.db)
