@@ -4,7 +4,7 @@ def resetar_banco():
     conn = sqlite3.connect("data/greenlink.db")
     cursor = conn.cursor()
 
-    print("🔄 A apagar tabelas antigas...")
+    print("🔄 A apagar tabelas antigas... ")
 
     # Remove todas as tabelas antigas, se existirem
     cursor.executescript("""
