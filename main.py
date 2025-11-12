@@ -48,7 +48,7 @@ def login():
             admin.menu()
             break
         elif tipo_user == "cliente":
-            print(f"Bem-vindo, {nome}! Tipo de utilizador: Cliente")
+            print(f"Bem-vindo, {nome}! Tipo de utilizador: Cliente ")
             cliente = Cliente(conectar())
             cliente.menu()
             break
