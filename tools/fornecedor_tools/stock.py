@@ -2,7 +2,7 @@ def ver_stock(db, fornecedor_nome):
     cursor = db.cursor()
 
     # Descobre se a tabela tem coluna 'preco'
-    cursor.execute("PRAGMA table_info(produtos)")
+    cursor.execute("PRAGMA table_info(produtos) ")
     colunas = [c[1] for c in cursor.fetchall()]
     tem_preco = 'preco' in colunas
 
