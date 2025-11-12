@@ -38,4 +38,4 @@ class Fornecedor:
                 break
             else:
                 print(" Opção inválida, tente novamente.")
-#fazer as coisas amanha
+#fazer as coisas amanha dia 13 
