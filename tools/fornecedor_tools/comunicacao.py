@@ -38,4 +38,4 @@ def abrir_ticket_produto(db, fornecedor_nome):
     """, (fornecedor_nome, nome_produto, preco, stock, "pendente"))
     db.commit()
 
-    print(f"✅ Ticket para '{nome_produto}' enviado ao admin.")
+    print(f"Ticket para '{nome_produto}' enviado ao admin.")
