@@ -1,54 +1,21 @@
 import sqlite3
 
-def inserir_dados_iniciais():
-    conn = sqlite3.connect("data/greenlink.db")
-    cursor = conn.cursor()
+conn = sqlite3.connect("data/greenlink.db")
+cursor = conn.cursor()
 
-    print(" Inserindo dados iniciais...")
+cursor.executemany("INSERT INTO utilizadores (nome, tipo, senha) VALUES (?, ?, ?)", [
+    ("admin", "admin", "1234"),
+    ("paul", "cliente", "123"),
+    ("camp", "fornecedor", "123")
+])
 
-    # ================================
-    #  UTILIZADORES
-    # ================================
-    cursor.execute("""
-        INSERT INTO utilizadores (nome, tipo, senha)
-        VALUES 
-        ('admin', 'admin', '1234'),
-        ('camp', 'cliente', '1234'),
-        ('goncalo', 'cliente', '1234')
-    """)
-    
-    # ================================
-    #  FORNECEDORES
-    # ================================
-    cursor.execute("""
-        INSERT INTO fornecedores (nome, contacto, senha)
-        VALUES ('a', 'agrovale@mail.com', '1234')
-    """)
+cursor.executemany("INSERT INTO produtos (nome, preco, stock) VALUES (?, ?, ?)", [
+    ("Brócolos", 2.5, 100),
+    ("Cenouras", 1.2, 200),
+    ("Alfaces", 1.8, 150)
+])
 
-    # Obter ID do fornecedor AgroVale
-    cursor.execute("SELECT id FROM fornecedores WHERE nome='a'")
-    fornecedor_id = cursor.fetchone()[0]
+conn.commit()
+conn.close()
 
-    # ================================
-    #  PRODUTOS
-    # ================================
-    cursor.execute("""
-        INSERT INTO produtos (nome, preco, stock, fornecedor_id)
-        VALUES ('Tomate', 1.99, 120, ?)
-    """, (fornecedor_id,))
-
-    # ================================
-    #  MENSAGENS (Cliente → Fornecedor)
-    # ================================
-    cursor.execute("""
-        INSERT INTO mensagens (emissor, recetor, mensagem)
-        VALUES ('Joao', 'AgroVale', 'Olá AgroVale, gostaria de saber se têm tomates disponíveis para entrega amanhã.');
-    """)
-
-    conn.commit()
-    conn.close()
-    print(" Dados iniciais inseridos com sucesso!")
-
-
-if __name__ == "__main__":
-    inserir_dados_iniciais()
+print("🌱 Dados de teste inseridos com sucesso!")
