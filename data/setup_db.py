@@ -88,7 +88,7 @@ def resetar_banco():
 
     conn.commit()
     conn.close()
-    print("✅ Banco de dados limpo e recriado com sucesso!")
+    print(" Banco de dados limpo e recriado com sucesso!")
 
 
 if __name__ == "__main__":
