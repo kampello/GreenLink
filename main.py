@@ -39,28 +39,26 @@ def login():
                 print(f"DEBUG: encontrado em fornecedores -> id={result[0]}")
         
         conn.close()
-        resetEcra()
-
-        # Entrar nos menus de acordo com o tipo de utilizador
-        if tipo_user == "admin":
-            print(f"Bem-vindo, {nome}! Tipo de utilizador: Admin")
-            admin = Admin(conectar())
-            admin.menu()
-            break
-        elif tipo_user == "cliente":
-            print(f"Bem-vindo, {nome}! Tipo de utilizador: Cliente ")
-            cliente = Cliente(conectar())
-            cliente.menu()
-            break
-        elif tipo_user == "fornecedor":
-            print(f"Bem-vindo, {nome}! Tipo de utilizador: Fornecedor")
-            fornecedor = Fornecedor(conectar(), nome)
-            fornecedor.menu()
-            break
+        
+        if user:
+            tipo_user = user[0].lower()
+            resetEcra()
+            print(f"Bem-vindo, {nome}! Tipo de utilizador: {user[0].capitalize()}")
+            nova_conect = conectar()
+            if tipo_user == "admin":
+                admin = Admin(nova_conect)
+                admin.menu()
+            elif tipo_user =="cliente":
+                cliente = Cliente(nova_conect)
+                cliente.menu()
+            elif tipo_user == "fornecedor":
+                fornecedor = Fornecedor(nova_conect, nome)
+                fornecedor.menu()
+            break # parar while true
+            
         else:
             print("Credenciais inválidas.")
 
 if __name__ == "__main__": 
     resetEcra()
     login()
-

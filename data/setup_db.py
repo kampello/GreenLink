@@ -50,9 +50,8 @@ def resetar_banco():
     );
     ''')
 
-    # === Tabela de pedidos ===
     cursor.execute('''
-    CREATE TABLE pedidos (
+    CREATE TABLE IF NOT EXISTS pedidos (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         cliente_id INTEGER,
         produto_id INTEGER,
@@ -63,33 +62,7 @@ def resetar_banco():
     );
     ''')
 
-    # === Tabela de tickets enviados pelos fornecedores ===
-    cursor.execute('''
-    CREATE TABLE tickets_produto (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        fornecedor TEXT NOT NULL,
-        produto TEXT NOT NULL,
-        preco REAL NOT NULL,
-        stock INTEGER NOT NULL,
-        status TEXT CHECK(status IN ('pendente','feito','rejeitado')) DEFAULT 'pendente'
-    );
-    ''')
-
-    # === Tabela de mensagens ===
-    cursor.execute('''
-    CREATE TABLE mensagens (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        emissor TEXT NOT NULL,
-        recetor TEXT NOT NULL,
-        mensagem TEXT NOT NULL,
-        timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
-    );
-    ''')
-
     conn.commit()
     conn.close()
-    print(" Banco de dados limpo e recriado com sucesso!")
 
-
-if __name__ == "__main__":
-    resetar_banco()
+print("Base de dados criada com sucesso!")
