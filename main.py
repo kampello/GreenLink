@@ -38,7 +38,7 @@ def login():
                 admin = Admin(nova_conect)
                 admin.menu()
             elif tipo_user =="cliente":
-                cliente = Cliente(nova_conect)
+                cliente = Cliente(nova_conect, nome)
                 cliente.menu()
             elif tipo_user == "fornecedor":
                 fornecedor = Fornecedor(nova_conect, nome)
