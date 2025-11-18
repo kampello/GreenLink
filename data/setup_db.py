@@ -48,13 +48,15 @@ cursor.execute("""
 CREATE TABLE IF NOT EXISTS entregas (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     pedido_id INTEGER,
-    fornecedor TEXT,
-    produto TEXT,
-    supermercado TEXT,
-    data_prevista DATE,
-    data_real DATE,
-    status TEXT DEFAULT 'pendente'
-);
+    produto TEXT NOT NULL,
+    fornecedor TEXT NOT NULL,
+    supermercado TEXT NOT NULL,
+    data_prevista TEXT NOT NULL,
+    data_real TEXT,
+    status TEXT CHECK(status IN ('no prazo', 'atrasado')),
+    FOREIGN KEY (pedido_id) REFERENCES pedidos(id)
+)
 """)
+
 
 print("Base de dados criada com sucesso!")

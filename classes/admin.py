@@ -1,5 +1,7 @@
 from tools.admin_tools.user_manager import criar_utilizador, apagar_utilizador, pesquisar_utilizador
 from tools.admin_tools.product_manager import *
+from tools.admin_tools.delivery_manager import ver_entregas
+
 
 class Admin:
     def __init__(self, db_connection):
@@ -18,6 +20,7 @@ class Admin:
             print("6. Ver stock")
             print("7. Ver informações de produtos")
             print("8. Aprovar / Negar Ticket")
+            print("9. Acompanhar Entrega")
             print("0. Sair")
 
             opcao = input("Escolha uma opção: ")
@@ -38,6 +41,8 @@ class Admin:
                 self.ver_informacoes_produtos()
             elif opcao == "8":
                     self.aprovar_ticket()
+            elif opcao == "9":
+                    self.ver_entregas()
             elif opcao == "0":
                 print("Saindo do painel de administração...")
                 break
@@ -69,3 +74,7 @@ class Admin:
 
     def ver_informacoes_produtos(self):
         ver_informacoes_produtos(self.db)
+    
+    def ver_entregas(self):
+        ver_entregas(self.db)
+
