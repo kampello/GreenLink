@@ -16,6 +16,7 @@ def resetar_banco():
     DROP TABLE IF EXISTS tickets_produto;
     """)
 
+<<<<<<< HEAD
     print("🧱 A recriar estrutura de tabelas...")
 
     # === Tabela de utilizadores ===
@@ -93,3 +94,28 @@ def resetar_banco():
 
 if __name__ == "__main__":
     resetar_banco()
+=======
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS pedidos (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    cliente_id INTEGER,
+    produto_id INTEGER,
+    quantidade INTEGER,
+    estado TEXT CHECK(estado IN ('feito','pago','enviado','entregue')) DEFAULT 'feito',
+    FOREIGN KEY (cliente_id) REFERENCES utilizadores(id),
+    FOREIGN KEY (produto_id) REFERENCES produtos(id)
+);
+''')
+cursor.execute('''
+CREATE TABLE tickets_produto (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    fornecedor TEXT,
+    produto TEXT,
+    preco REAL,
+    stock INTEGER,
+    status TEXT DEFAULT 'pendente'
+);
+
+''')
+print("Base de dados criada com sucesso!")
+>>>>>>> main

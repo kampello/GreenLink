@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 from tools.fornecedor_tools.stock import ver_stock, atualizar_stock
 from tools.fornecedor_tools.comunicacao import enviar_mensagem, ver_mensagens
+=======
+from tools.fornecedor_tools.stock import ver_stock, atualizar_stock, ver_pedidos_recebidos
+from tools.fornecedor_tools.comunicacao import enviar_mensagem, ver_mensagens, abrir_ticket_produto
+>>>>>>> main
 
 class Fornecedor:
     def __init__(self, db_connection, nome):
@@ -31,7 +36,11 @@ class Fornecedor:
             elif opcao == "5":
                 ver_mensagens(self.db, self.nome)
             elif opcao == "6":
+<<<<<<< HEAD
                 print("→ Função abrir ticket ainda não implementada")
+=======
+                abrir_ticket_produto(self.db, self.nome)
+>>>>>>> main
             elif opcao == "0":
                 print("Saindo do painel do fornecedor...")
                 break
