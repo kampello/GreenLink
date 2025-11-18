@@ -32,8 +32,9 @@ CREATE TABLE IF NOT EXISTS pedidos (
     FOREIGN KEY (produto_id) REFERENCES produtos(id)
 );
 ''')
-cursor.execute('''
-CREATE TABLE tickets_produto (
+
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS tickets_produto (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     fornecedor TEXT,
     produto TEXT,
@@ -41,6 +42,19 @@ CREATE TABLE tickets_produto (
     stock INTEGER,
     status TEXT DEFAULT 'pendente'
 );
+""")
 
-''')
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS entregas (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    pedido_id INTEGER,
+    fornecedor TEXT,
+    produto TEXT,
+    supermercado TEXT,
+    data_prevista DATE,
+    data_real DATE,
+    status TEXT DEFAULT 'pendente'
+);
+""")
+
 print("Base de dados criada com sucesso!")
