@@ -40,24 +40,23 @@ def login():
         
         conn.close()
         
-        if user:
-            tipo_user = user[0].lower()
+        if tipo_user:
             resetEcra()
-            print(f"Bem-vindo, {nome}! Tipo de utilizador: {user[0].capitalize()}")
+            print(f"Bem-vindo, {nome}! Tipo de utilizador: {tipo_user.capitalize()}")
             nova_conect = conectar()
             if tipo_user == "admin":
                 admin = Admin(nova_conect)
                 admin.menu()
-            elif tipo_user =="cliente":
-                cliente = Cliente(nova_conect)
+            elif tipo_user == "cliente":
+                cliente = Cliente(nova_conect, nome) 
                 cliente.menu()
             elif tipo_user == "fornecedor":
                 fornecedor = Fornecedor(nova_conect, nome)
                 fornecedor.menu()
-            break # parar while true
-            
+            break
         else:
             print("Credenciais inválidas.")
+
 
 if __name__ == "__main__": 
     resetEcra()
