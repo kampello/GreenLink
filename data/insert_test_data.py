@@ -4,7 +4,7 @@ def inserir_dados_iniciais():
     conn = sqlite3.connect("data/greenlink.db")
     cursor = conn.cursor()
 
-    print("📥 Inserindo dados iniciais...")
+    print(" Inserindo dados iniciais...")
 
     # ================================
     #  UTILIZADORES
@@ -12,9 +12,9 @@ def inserir_dados_iniciais():
     cursor.execute("""
         INSERT INTO utilizadores (nome, tipo, senha)
         VALUES 
-        ('admin', 'admin', 'admin123'),
-        ('Joao', 'cliente', '1234'),
-        ('Maria', 'cliente', '5678')
+        ('admin', 'admin', '1234'),
+        ('camp', 'cliente', '1234'),
+        ('goncalo', 'cliente', '1234')
     """)
     
     # ================================
@@ -47,7 +47,7 @@ def inserir_dados_iniciais():
 
     conn.commit()
     conn.close()
-    print("✅ Dados iniciais inseridos com sucesso!")
+    print(" Dados iniciais inseridos com sucesso!")
 
 
 if __name__ == "__main__":

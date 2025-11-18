@@ -4,7 +4,7 @@ def resetar_banco():
     conn = sqlite3.connect("data/greenlink.db")
     cursor = conn.cursor()
 
-    print("🔄 A apagar tabelas antigas... ")
+    print(" A apagar tabelas antigas... ")
 
     # Remove todas as tabelas antigas, se existirem
     cursor.executescript("""
@@ -16,7 +16,7 @@ def resetar_banco():
     DROP TABLE IF EXISTS tickets_produto;
     """)
 
-    print("🧱 A recriar estrutura de tabelas...")
+    print(" A recriar estrutura de tabelas...")
 
     # === Tabela de utilizadores ===
     cursor.execute('''
