@@ -12,6 +12,8 @@ def resetar_banco():
     DROP TABLE IF EXISTS produtos;
     DROP TABLE IF EXISTS fornecedores;
     DROP TABLE IF EXISTS utilizadores;
+    DROP TABLE IF EXISTS mensagens;
+    DROP TABLE IF EXISTS tickets_produto;
     """)
 
     print("🧱 A recriar estrutura de tabelas...")
@@ -58,6 +60,29 @@ def resetar_banco():
         estado TEXT CHECK(estado IN ('feito','pago','enviado','entregue')) DEFAULT 'feito',
         FOREIGN KEY (cliente_id) REFERENCES utilizadores(id),
         FOREIGN KEY (produto_id) REFERENCES produtos(id)
+    );
+    ''')
+
+    # === Tabela de tickets enviados pelos fornecedores ===
+    cursor.execute('''
+    CREATE TABLE tickets_produto (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        fornecedor TEXT NOT NULL,
+        produto TEXT NOT NULL,
+        preco REAL NOT NULL,
+        stock INTEGER NOT NULL,
+        status TEXT CHECK(status IN ('pendente','feito','rejeitado')) DEFAULT 'pendente'
+    );
+    ''')
+
+    # === Tabela de mensagens ===
+    cursor.execute('''
+    CREATE TABLE mensagens (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        emissor TEXT NOT NULL,
+        recetor TEXT NOT NULL,
+        mensagem TEXT NOT NULL,
+        timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
     );
     ''')
 
