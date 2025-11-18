@@ -22,11 +22,11 @@ def inserir_dados_iniciais():
     # ================================
     cursor.execute("""
         INSERT INTO fornecedores (nome, contacto, senha)
-        VALUES ('AgroVale', 'agrovale@mail.com', 'agro123')
+        VALUES ('a', 'agrovale@mail.com', '1234')
     """)
 
     # Obter ID do fornecedor AgroVale
-    cursor.execute("SELECT id FROM fornecedores WHERE nome='AgroVale'")
+    cursor.execute("SELECT id FROM fornecedores WHERE nome='a'")
     fornecedor_id = cursor.fetchone()[0]
 
     # ================================

@@ -23,7 +23,7 @@ def resetar_banco():
     CREATE TABLE utilizadores (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         nome TEXT UNIQUE NOT NULL,
-        tipo TEXT CHECK(tipo IN ('admin','cliente')) NOT NULL,
+        tipo TEXT CHECK(tipo IN ('admin','cliente', 'fornecedor')) NOT NULL,
         senha TEXT NOT NULL
     );
     ''')
