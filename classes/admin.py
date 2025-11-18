@@ -6,7 +6,7 @@ from tools.admin_tools.delivery_manager import ver_entregas
 class Admin:
     def __init__(self, db_connection):
         self.db = db_connection
-
+    
     def menu(self):
         
         while True:
