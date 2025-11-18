@@ -32,8 +32,15 @@ CREATE TABLE IF NOT EXISTS pedidos (
     FOREIGN KEY (produto_id) REFERENCES produtos(id)
 );
 ''')
+cursor.execute('''
+CREATE TABLE tickets_produto (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    fornecedor TEXT,
+    produto TEXT,
+    preco REAL,
+    stock INTEGER,
+    status TEXT DEFAULT 'pendente'
+);
 
-conn.commit()
-conn.close()
-
+''')
 print("Base de dados criada com sucesso!")

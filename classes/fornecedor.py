@@ -1,5 +1,5 @@
 from tools.fornecedor_tools.stock import ver_stock, atualizar_stock, ver_pedidos_recebidos
-from tools.fornecedor_tools.comunicacao import enviar_mensagem, ver_mensagens
+from tools.fornecedor_tools.comunicacao import enviar_mensagem, ver_mensagens, abrir_ticket_produto
 
 class Fornecedor:
     def __init__(self, db_connection, nome):
@@ -9,17 +9,14 @@ class Fornecedor:
     def menu(self):
         while True:
             print("\n===== Painel do Fornecedor =====")
-            print("(Não Funciona)")
-            print("1. Ver pedidos recebidos ")
-            print(" (Funciona menos a parte de adicionar novos produtos)")
-            print("2. Atualizar stock de produtos")
-            print("(Falta mostrar o preço)")
-            print("3. Ver stock atual")
-            print("(Não Funciona)")
-            print("4. Enviar mensagem ao cliente")
-            print("(Não Funciona)")
-            print("5. Ver mensagens recebidas")
+            print("1. Ver pedidos recebidos (em desenvolvimento)")
+            print("2. Atualizar stock de produtos (em desenvolvimento: falta mostrar o preço)")
+            print("3. Ver stock atual (em desenvolvimento)")
+            print("4. Enviar mensagem ao cliente (em desenvolvimento)")
+            print("5. Ver mensagens recebidas (em desenvolvimento)")
+            print("6. Abrir ticket para adicionar novo produto ao admin")
             print("0. Sair")
+
 
             opcao = input("Escolha uma opção: ")
 
@@ -33,6 +30,8 @@ class Fornecedor:
                 enviar_mensagem(self.db, self.nome)
             elif opcao == "5":
                 ver_mensagens(self.db, self.nome)
+            elif opcao == "6":
+                abrir_ticket_produto(self.db, self.nome)
             elif opcao == "0":
                 print(" Saindo do painel do fornecedor...")
                 break
