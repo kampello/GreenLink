@@ -3,7 +3,7 @@ import sqlite3
 from tools.toolbox import *
 from classes.admin import Admin
 from classes.cliente import Cliente
-from classes.fornecedor import Fornecedor  # ✅ Import do fornecedor
+from classes.fornecedor import Fornecedor
 
 def conectar():
     return sqlite3.connect("data/greenlink.db")

@@ -3,9 +3,15 @@ def enviar_mensagem(db, cliente_nome):
 
     print("\n=== Enviar Mensagem a Fornecedor ===")
 
-    # Buscar lista de fornecedores registados
+    # Buscar fornecedores das duas tabelas
     cursor.execute("SELECT nome FROM utilizadores WHERE tipo = 'fornecedor'")
-    fornecedores = cursor.fetchall()
+    fornecedores1 = cursor.fetchall()
+
+    cursor.execute("SELECT nome FROM fornecedores")
+    fornecedores2 = cursor.fetchall()
+
+    # Juntar tudo e remover duplicados
+    fornecedores = list({f[0] for f in fornecedores1 + fornecedores2})
 
     if not fornecedores:
         print("❌ Não existem fornecedores registados.")
@@ -13,7 +19,7 @@ def enviar_mensagem(db, cliente_nome):
 
     print("\nFornecedores disponíveis:")
     for i, f in enumerate(fornecedores, 1):
-        print(f"{i}. {f[0]}")
+        print(f"{i}. {f}")
 
     try:
         escolha = int(input("\nSelecione o número do fornecedor: "))
@@ -24,7 +30,7 @@ def enviar_mensagem(db, cliente_nome):
         print("❌ Entrada inválida.")
         return
 
-    recetor = fornecedores[escolha - 1][0]
+    recetor = fornecedores[escolha - 1]
 
     mensagem = input(f"Escreva a mensagem para {recetor}: ").strip()
     if not mensagem:
