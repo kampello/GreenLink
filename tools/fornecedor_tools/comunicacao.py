@@ -12,30 +12,37 @@ def enviar_mensagem(db, fornecedor_nome):
 
 def ver_mensagens(db, nome_fornecedor):
     cursor = db.cursor()
-    cursor.execute(
-        "SELECT remetente, conteudo FROM mensagens WHERE destinatario = ?",
-        (fornecedor_nome,)
-    )
+
+    # Obter ID do fornecedor
+    cursor.execute("SELECT id FROM fornecedores WHERE nome = ?", (nome_fornecedor,))
+    fornecedor = cursor.fetchone()
+
+    if not fornecedor:
+        print("⚠ Erro: fornecedor não encontrado.")
+        return
+
+    fornecedor_id = fornecedor[0]
+
+    print("\n=== 📩 Mensagens Recebidas ===\n")
+
+    cursor.execute("""
+        SELECT m.id, u.nome, m.mensagem, m.data
+        FROM mensagens m
+        JOIN utilizadores u
+        ON m.emissor_id = u.id AND m.emissor_tipo = 'utilizador'
+        WHERE m.destinatario_id = ? AND m.destinatario_tipo = 'fornecedor'
+        ORDER BY m.data DESC
+    """, (fornecedor_id,))
+
     mensagens = cursor.fetchall()
 
-    if mensagens:
-        print("\n Mensagens recebidas:")
-        for m in mensagens:
-            print(f"De {m[0]}: {m[1]}")
-    else:
-        print(" Nenhuma mensagem nova.")
+    if not mensagens:
+        print("Nenhuma mensagem recebida.")
+        return
 
-#abrir um ticket quando o admin fizer login
-def abrir_ticket_produto(db, fornecedor_nome):
-    nome_produto = input("Nome do produto: ")
-    preco = float(input("Preço sugerido: "))
-    stock = int(input("Quantidade inicial: "))
-
-    cursor = db.cursor()
-    cursor.execute("""
-        INSERT INTO tickets_produto (fornecedor, produto, preco, stock, status)
-        VALUES (?, ?, ?, ?, ?)
-    """, (fornecedor_nome, nome_produto, preco, stock, "pendente"))
-    db.commit()
-
-    print(f"✅ Ticket para '{nome_produto}' enviado ao admin.")
+    for mid, nome, msg, data in mensagens:
+        print(f"📨 Mensagem #{mid}")
+        print(f"👤 De: {nome}")
+        print(f"📅 Data: {data}")
+        print(f"💬 Conteúdo: {msg}")
+        print("-" * 40)
