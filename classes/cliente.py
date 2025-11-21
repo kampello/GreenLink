@@ -2,10 +2,10 @@ from tools.cliente_tools.pedidos import ver_pedidos, fazer_pedido, ver_produtos_
 from tools.cliente_tools.comunicacao import enviar_mensagem, ver_mensagens
 
 class Cliente:
-    def __init__(self, db_connection):
+    def __init__(self, db_connection, nome):
         self.db = db_connection
-
-
+        self.nome = nome
+    
     def menu(self):
         while True:
             print("\n===== Painel do Cliente =====")

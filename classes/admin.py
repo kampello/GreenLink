@@ -46,10 +46,6 @@ class Admin:
     def verificar_tickets_pendentes(self):
         verificar_tickets_pendentes(self.db)
 
-    def aprovar_ticket(self):
-        aprovar_ticket(self.db)
-
-
     def criar_utilizador(self):
         criar_utilizador(self.db)
 
@@ -64,8 +60,12 @@ class Admin:
 
     def remover_produto(self):
         remover_produto(self.db)
+        
     def ver_stock(self):
         ver_stock(self.db)
 
     def ver_informacoes_produtos(self):
         ver_informacoes_produtos(self.db)
+
+    def aprovar_ticket(self):
+        aprovar_ticket(self.db)

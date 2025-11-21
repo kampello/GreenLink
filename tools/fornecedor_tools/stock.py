@@ -1,30 +1,34 @@
-def ver_stock(db):
+def ver_stock(db, fornecedor_nome):
     cursor = db.cursor()
 
-    # Descobre as colunas da tabela "produtos"
-    cursor.execute("PRAGMA table_info(produtos)")
+    # Descobre se a tabela tem coluna 'preco'
+    cursor.execute("PRAGMA table_info(produtos) ")
     colunas = [c[1] for c in cursor.fetchall()]
     tem_preco = 'preco' in colunas
 
-    # Busca produtos
-    if tem_preco:
-        cursor.execute("SELECT nome, stock, preco FROM produtos")
-    else:
-        cursor.execute("SELECT nome, stock FROM produtos")
-
+    # Busca produtos do fornecedor
+    query = f"""
+        SELECT p.nome, p.stock, p.preco
+        FROM produtos p
+        JOIN fornecedores f ON p.fornecedor_id = f.id
+        WHERE f.nome = ?
+    """ if tem_preco else f"""
+        SELECT p.nome, p.stock
+        FROM produtos p
+        JOIN fornecedores f ON p.fornecedor_id = f.id
+        WHERE f.nome = ?
+    """
+    cursor.execute(query, (fornecedor_nome,))
     produtos = cursor.fetchall()
 
     if not produtos:
-        print(" Nenhum produto registado.")
+        print(" Nenhum produto registado para este fornecedor.")
         return
 
     # Cálculo automático da largura de cada coluna
     max_nome = max(len(p[0]) for p in produtos)
     max_stock = max(len(str(p[1])) for p in produtos)
-    if tem_preco:
-        max_preco = max(len(f"{p[2]:.2f}") for p in produtos)
-    else:
-        max_preco = 0
+    max_preco = max(len(f"{p[2]:.2f}") for p in produtos) if tem_preco else 0
 
     print("\n Stock atual:\n")
 
@@ -47,12 +51,17 @@ def ver_stock(db):
             print(f"{nome} | {stock}")
 
 
-def atualizar_stock(db):
+def atualizar_stock(db, fornecedor_nome):
     cursor = db.cursor()
     produto = input("Nome do produto: ").strip()
 
-    # Verifica se o produto existe
-    cursor.execute("SELECT id, stock FROM produtos WHERE nome = ?", (produto,))
+    # Verifica se o produto existe e pertence a este fornecedor
+    cursor.execute("""
+        SELECT p.id, p.stock
+        FROM produtos p
+        JOIN fornecedores f ON p.fornecedor_id = f.id
+        WHERE p.nome = ? AND f.nome = ?
+    """, (produto, fornecedor_nome))
     resultado = cursor.fetchone()
 
     if resultado:
@@ -62,16 +71,14 @@ def atualizar_stock(db):
     else:
         print("Produto não encontrado. Criar novo produto:")
         stock = int(input("Stock inicial: "))
-        try:
-            preco = float(input("Preço (€): "))
-            cursor.execute("INSERT INTO produtos (nome, stock, preco) VALUES (?, ?, ?)", (produto, stock, preco))
-        except Exception:
-            cursor.execute("INSERT INTO produtos (nome, stock) VALUES (?, ?)", (produto, stock))
-        print(f" Produto '{produto}' adicionado com {stock} unidades.")
+        preco = float(input("Preço (€): "))
+        # Obter id do fornecedor
+        cursor.execute("SELECT id FROM fornecedores WHERE nome = ?", (fornecedor_nome,))
+        fornecedor_id = cursor.fetchone()[0]
+        cursor.execute(
+            "INSERT INTO produtos (nome, stock, preco, fornecedor_id) VALUES (?, ?, ?, ?)",
+            (produto, stock, preco, fornecedor_id)
+        )
+        print(f" Produto '{produto}' adicionado com {stock} unidades para {fornecedor_nome}.")
 
     db.commit()
-
-
-def ver_pedidos_recebidos(db, fornecedor):
-    # Placeholder — ainda por implementar
-    print("→ Função ver_pedidos_recebidos() ainda não implementada.")

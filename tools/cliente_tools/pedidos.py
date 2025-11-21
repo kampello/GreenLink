@@ -2,16 +2,28 @@ import sqlite3
 
 def ver_pedidos(db, cliente_nome):
     cursor = db.cursor()
-    cursor.execute(
-        "SELECT id, produto, quantidade, estado FROM pedidos WHERE cliente = ?",
-        (cliente_nome,)
-    )
+
+    # Pega o ID do cliente
+    cursor.execute("SELECT id FROM utilizadores WHERE nome=?", (cliente_nome,))
+    cliente = cursor.fetchone()
+    if not cliente:
+        print("⚠️ Cliente não encontrado.")
+        return
+    cliente_id = cliente[0]
+
+    # Procurar pedidos do cliente
+    cursor.execute("""
+        SELECT produtos.nome, pedidos.quantidade, pedidos.estado
+        FROM pedidos
+        JOIN produtos ON pedidos.produto_id = produtos.id
+        WHERE pedidos.cliente_id = ?
+    """, (cliente_id,))
     pedidos = cursor.fetchall()
 
     if pedidos:
         print("\n📋 Seus pedidos:")
         for p in pedidos:
-            print(f"ID: {p[0]} | Produto: {p[1]} | Quantidade: {p[2]} | Estado: {p[3]}")
+            print(f"Produto: {p[0]} | Quantidade: {p[1]} | Estado: {p[2]}")
     else:
         print("⚠️ Nenhum pedido encontrado.")
 
@@ -28,19 +40,58 @@ def ver_produtos_disponiveis(db):
         print("⚠️ Nenhum produto disponível no momento.")
 
 def fazer_pedido(db, cliente_nome):
-    produto = input("Nome do produto que deseja comprar: ")
-    quantidade = int(input("Quantidade: "))
-
     cursor = db.cursor()
-    cursor.execute("SELECT stock FROM produtos WHERE nome = ?", (produto,))
-    resultado = cursor.fetchone()
+    
+    cursor.execute("SELECT nome, preco, stock FROM produtos ")
+    produtos = cursor.fetchall()
 
-    if resultado and resultado[0] >= quantidade:
-        cursor.execute(
-            "INSERT INTO pedidos (cliente, produto, quantidade, estado) VALUES (?, ?, ?, ?)",
-            (cliente_nome, produto, quantidade, "pendente")
-        )
-        db.commit()
-        print(f"✅ Pedido do produto '{produto}' criado com sucesso!")
-    else:
-        print("❌ Produto inexistente ou stock insuficiente.")
+    if not produtos:
+        print("Nenhum produto disponível.")
+        return
+    
+    print("\n Produto disponíveis: ")
+    for nome, preco, stock in produtos:
+        print(f"- {nome} | Preço: €{preco} | Stock: {stock}")
+        
+    produto_escolhido = input("\n Nome do produto que deseja comprar: ").strip()
+    
+    cursor.execute("SELECT id, stock FROM produtos WHERE nome = ?", (produto_escolhido,))
+    produto = cursor.fetchone()
+    
+    if not produtos:
+        print("Nenhum produto disponível.")
+        return
+    
+    produto_id, stock = produto
+    
+    try:
+        quantidade = int(input("Quantidade: "))
+    except ValueError:
+        print("Quantidade Inválida.")
+        return
+    if quantidade <= 0 or quantidade > stock:
+        print("Quantidade inválida.")
+        return
+    elif quantidade > stock:
+        print("Stock insuficiente")
+        return
+    
+    cursor.execute("SELECT id FROM utilizadores WHERE nome = ?", (cliente_nome,))
+    cliente = cursor.fetchone()
+    
+    if not cliente:
+        print("Erro interno: cliente não encontrado.")
+        return
+    
+    cliente_id = cliente[0]
+    
+    cursor.execute("""
+        INSERT INTO pedidos (cliente_id, produto_id, quantidade, estado)
+        VALUES (?, ?, ?, 'feito')
+        """, (cliente_id, produto_id, quantidade))
+    
+    
+    cursor.execute("UPDATE produtos SET stock = stock - ? WHERE id = ?", (quantidade, produto_id))
+
+    db.commit()
+    print(f"Pedido de {quantidade}x {produto_escolhido} realizado com sucesso.")
