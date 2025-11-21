@@ -58,5 +58,18 @@ CREATE TABLE IF NOT EXISTS entregas (
 )
 """)
 
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS objetivos_mensais (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    mes TEXT,
+    objetivo_producao REAL,
+    objetivo_vendas REAL,
+    objetivo_receita REAL,
+    realizado_producao REAL DEFAULT 0,
+    realizado_vendas REAL DEFAULT 0,
+    realizado_receita REAL DEFAULT 0
+);
+''')
+
 
 print("Base de dados criada com sucesso!")
