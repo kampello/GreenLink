@@ -91,10 +91,7 @@ def resetar_banco():
         mensagem TEXT NOT NULL,
         data TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 
-        emissor TEXT NOT NULL,
-        recetor TEXT NOT NULL,
-        mensagem TEXT NOT NULL,
-        timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+        
 
     );
     ''')
