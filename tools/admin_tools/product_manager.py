@@ -116,6 +116,8 @@ def aprovar_ticket(db):
     if not res:
         print("Erro: fornecedor WHERE nome = ?", (fornecedor,))
         return
+    fornecedor_id = res[0]
+    
     if escolha == "A":
         cursor.execute("INSERT INTO produtos (nome, preco, stock) VALUES (?, ?, ?)", (produto, preco, stock))
         cursor.execute("UPDATE tickets_produto SET status='feito' WHERE id=?", (ticket_id,))
