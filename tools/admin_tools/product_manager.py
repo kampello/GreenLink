@@ -112,7 +112,7 @@ def aprovar_ticket(db):
 
     #Obter fornecedor_id
     cursor.execute("SELECT id FROM fornecedores WHERE nome = ?", (fornecedor,))
-    
+    res = cursor.fetchone()
     if escolha == "A":
         cursor.execute("INSERT INTO produtos (nome, preco, stock) VALUES (?, ?, ?)", (produto, preco, stock))
         cursor.execute("UPDATE tickets_produto SET status='feito' WHERE id=?", (ticket_id,))
