@@ -1,5 +1,5 @@
 from tools.fornecedor_tools.stock import ver_stock, atualizar_stock
-from tools.fornecedor_tools.comunicacao import enviar_mensagem, ver_mensagens,abrir_ticket_produto
+from tools.fornecedor_tools.comunicacao import enviar_mensagem, ver_mensagens
 
 class Fornecedor:
     def __init__(self, db_connection, nome):
@@ -30,8 +30,7 @@ class Fornecedor:
                 enviar_mensagem(self.db, self.nome)
             elif opcao == "5":
                 ver_mensagens(self.db, self.nome)
-            elif opcao == "6":
-                abrir_ticket_produto(self.db, self.nome)
+        
             elif opcao == "0":
                 print("Saindo do painel do fornecedor...")
                 break
