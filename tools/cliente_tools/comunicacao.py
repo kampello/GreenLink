@@ -33,3 +33,4 @@ def ver_mensagens(db, cliente_nome):
         print(f"📅 Data: {data}")
         print(f"💬 Conteúdo: {msg}")
         print("-" * 40)
+ 
