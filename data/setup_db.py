@@ -13,8 +13,11 @@ def resetar_banco():
     DROP TABLE IF EXISTS produtos;
     DROP TABLE IF EXISTS fornecedores;
     DROP TABLE IF EXISTS utilizadores;
+    DROP TABLE IF EXISTS mensagens;
+    DROP TABLE IF EXISTS tickets_produto;
     """)
 
+<<<<<<< HEAD
     print("🧱 A recriar estrutura de tabelas...")
 
     # === Tabela de utilizadores ===
@@ -62,19 +65,6 @@ def resetar_banco():
     );
     ''')
 
-    # === Tabela de mensagens ===
-    cursor.execute('''
-    CREATE TABLE mensagens (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        emissor_id INTEGER NOT NULL,
-        emissor_tipo TEXT CHECK(emissor_tipo IN ('utilizador','fornecedor')) NOT NULL,
-        destinatario_id INTEGER NOT NULL,
-        destinatario_tipo TEXT CHECK(destinatario_tipo IN ('utilizador','fornecedor')) NOT NULL,
-        mensagem TEXT NOT NULL,
-        data TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    );
-    ''')
-
     conn.commit()
     conn.close()
     print("✅ Banco de dados limpo e recriado com sucesso!")
@@ -82,3 +72,28 @@ def resetar_banco():
 
 if __name__ == "__main__":
     resetar_banco()
+=======
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS pedidos (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    cliente_id INTEGER,
+    produto_id INTEGER,
+    quantidade INTEGER,
+    estado TEXT CHECK(estado IN ('feito','pago','enviado','entregue')) DEFAULT 'feito',
+    FOREIGN KEY (cliente_id) REFERENCES utilizadores(id),
+    FOREIGN KEY (produto_id) REFERENCES produtos(id)
+);
+''')
+cursor.execute('''
+CREATE TABLE tickets_produto (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    fornecedor TEXT,
+    produto TEXT,
+    preco REAL,
+    stock INTEGER,
+    status TEXT DEFAULT 'pendente'
+);
+
+''')
+print("Base de dados criada com sucesso!")
+>>>>>>> main

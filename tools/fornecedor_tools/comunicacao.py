@@ -1,88 +1,41 @@
-import sqlite3
+def enviar_mensagem(db, fornecedor_nome):
+    cliente = input("Cliente destinatário: ")
+    mensagem = input("Mensagem: ")
 
-def enviar_mensagem(db, nome_fornecedor):
     cursor = db.cursor()
-
-    # Obter ID do fornecedor
-    cursor.execute("SELECT id FROM fornecedores WHERE nome = ?", (nome_fornecedor,))
-    fornecedor = cursor.fetchone()
-
-    if not fornecedor:
-        print("⚠ Erro: fornecedor não encontrado.")
-        return
-
-    fornecedor_id = fornecedor[0]
-
-    # Listar todos os destinatários disponíveis (clientes e admins)
-    cursor.execute("SELECT id, nome, tipo FROM utilizadores")
-    destinatarios = cursor.fetchall()
-
-    if not destinatarios:
-        print("Nenhum destinatário disponível.")
-        return
-
-    print("\n--- Destinatários disponíveis ---")
-    for uid, nome, tipo in destinatarios:
-        print(f"{uid} - {nome} ({tipo})")
-
-    try:
-        destinatario_id = int(input("\nDigite o ID do destinatário: "))
-    except ValueError:
-        print("ID inválido.")
-        return
-
-    # Verificar se o ID existe
-    cursor.execute("SELECT id, nome, tipo FROM utilizadores WHERE id = ?", (destinatario_id,))
-    recebe = cursor.fetchone()
-    if not recebe:
-        print("⚠ Destinatário não encontrado.")
-        return
-
-    mensagem = input("Digite a mensagem: ")
-
-    # Inserir no banco
-    cursor.execute("""
-        INSERT INTO mensagens (emissor_id, emissor_tipo, destinatario_id, destinatario_tipo, mensagem)
-        VALUES (?, 'fornecedor', ?, 'utilizador', ?)
-    """, (fornecedor_id, destinatario_id, mensagem))
-
+    cursor.execute(
+        "INSERT INTO mensagens (remetente, destinatario, conteudo) VALUES (?, ?, ?)",
+        (fornecedor_nome, cliente, mensagem)
+    )
     db.commit()
-    print("✔ Mensagem enviada com sucesso!")
-
+    print(f"Mensagem enviada para {cliente}!")
 
 def ver_mensagens(db, nome_fornecedor):
     cursor = db.cursor()
-
-    # Obter ID do fornecedor
-    cursor.execute("SELECT id FROM fornecedores WHERE nome = ?", (nome_fornecedor,))
-    fornecedor = cursor.fetchone()
-
-    if not fornecedor:
-        print("⚠ Erro: fornecedor não encontrado.")
-        return
-
-    fornecedor_id = fornecedor[0]
-
-    print("\n=== 📩 Mensagens Recebidas ===\n")
-
-    cursor.execute("""
-        SELECT m.id, u.nome, m.mensagem, m.data
-        FROM mensagens m
-        JOIN utilizadores u
-        ON m.emissor_id = u.id AND m.emissor_tipo = 'utilizador'
-        WHERE m.destinatario_id = ? AND m.destinatario_tipo = 'fornecedor'
-        ORDER BY m.data DESC
-    """, (fornecedor_id,))
-
+    cursor.execute(
+        "SELECT remetente, conteudo FROM mensagens WHERE destinatario = ?",
+        (fornecedor_nome,)
+    )
     mensagens = cursor.fetchall()
 
-    if not mensagens:
-        print("Nenhuma mensagem recebida.")
-        return
+    if mensagens:
+        print("\n Mensagens recebidas:")
+        for m in mensagens:
+            print(f"De {m[0]}: {m[1]}")
+    else:
+        print(" Nenhuma mensagem nova.")
 
-    for mid, nome, msg, data in mensagens:
-        print(f"📨 Mensagem #{mid}")
-        print(f"👤 De: {nome}")
-        print(f"📅 Data: {data}")
-        print(f"💬 Conteúdo: {msg}")
-        print("-" * 40)
+#abrir um ticket quando o admin fizer login
+def abrir_ticket_produto(db, fornecedor_nome):
+    nome_produto = input("Nome do produto: ")
+    preco = float(input("Preço sugerido: "))
+    stock = int(input("Quantidade inicial: "))
+
+    cursor = db.cursor()
+    cursor.execute("""
+        INSERT INTO tickets_produto (fornecedor, produto, preco, stock, status)
+        VALUES (?, ?, ?, ?, ?)
+    """, (fornecedor_nome, nome_produto, preco, stock, "pendente"))
+    db.commit()
+
+    print(f"✅ Ticket para '{nome_produto}' enviado ao admin.")

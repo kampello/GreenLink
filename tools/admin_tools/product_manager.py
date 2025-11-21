@@ -58,3 +58,62 @@ def ver_informacoes_produtos(db):
             print(f"ID: {p[0]} | Nome: {p[1]} | Preço: €{p[2]:.2f} | Stock: {p[3]}")
     else:
         print("Nenhum produto encontrado.")
+
+def verificar_tickets_pendentes(db):
+    cursor = db.cursor()
+    cursor.execute("SELECT id, fornecedor, produto, preco, stock FROM tickets_produto WHERE status='pendente'")
+    tickets = cursor.fetchall()
+
+    if tickets:
+        print("\n📌 Tickets pendentes de aprovação:")
+        for t in tickets:
+            print(f"ID: {t[0]} | Fornecedor: {t[1]} | Produto: {t[2]} | Preço: €{t[3]:.2f} | Stock: {t[4]}")
+        print("Aguarda aprovação do admin...\n")
+    else:
+        print("Nenhum ticket pendente no momento.")
+
+
+
+def aprovar_ticket(db):
+    cursor = db.cursor()
+
+    # Pega todos os tickets pendentes
+    cursor.execute("SELECT id, fornecedor, produto, preco, stock FROM tickets_produto WHERE status='pendente'")
+    tickets = cursor.fetchall()
+
+    if not tickets:
+        print("Nenhum ticket pendente no momento.")
+        return
+
+    print("\nTickets pendentes:")
+    for t in tickets:
+        print(f"ID: {t[0]} | Fornecedor: {t[1]} | Produto: {t[2]} | Preço: €{t[3]:.2f} | Stock: {t[4]}")
+
+    escolha = input("\nDeseja Aprovar ou Negar? - (A/N): ").strip().upper()
+    if escolha not in ("A", "N"):
+        print("Opção inválida.")
+        return
+
+    try:
+        ticket_id = int(input("Digite o ID do ticket que deseja processar: "))
+    except ValueError:
+        print("ID inválido.")
+        return
+
+    cursor.execute("SELECT fornecedor, produto, preco, stock FROM tickets_produto WHERE id=? AND status='pendente'", (ticket_id,))
+    ticket = cursor.fetchone()
+    if not ticket:
+        print("❌ Ticket não encontrado ou já processado.")
+        return
+
+    fornecedor, produto, preco, stock = ticket
+
+    if escolha == "A":
+        cursor.execute("INSERT INTO produtos (nome, preco, stock) VALUES (?, ?, ?)", (produto, preco, stock))
+        cursor.execute("UPDATE tickets_produto SET status='feito' WHERE id=?", (ticket_id,))
+        print(f"✅ Ticket do produto '{produto}' aprovado e adicionado ao catálogo.")
+    else:
+        cursor.execute("UPDATE tickets_produto SET status='rejeitado' WHERE id=?", (ticket_id,))
+        print(f"❌ Ticket do produto '{produto}' rejeitado pelo admin.")
+
+    db.commit()
