@@ -119,7 +119,7 @@ def aprovar_ticket(db):
     fornecedor_id = res[0]
     
     if escolha == "A":
-        cursor.execute("INSERT INTO produtos (nome, preco, stock) VALUES (?, ?, ?)", (produto, preco, stock))
+        cursor.execute("INSERT INTO produtos (nome, preco, stock, fornecedor_id) VALUES (?, ?, ?, ?)", (produto, preco, stock, fornecedor_id))
         cursor.execute("UPDATE tickets_produto SET status='feito' WHERE id=?", (ticket_id,))
         print(f"✅ Ticket do produto '{produto}' aprovado e adicionado ao catálogo.")
     else:
