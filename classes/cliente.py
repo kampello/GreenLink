@@ -25,7 +25,7 @@ class Cliente:
             elif opcao == "2":
                 fazer_pedido(self.db, self.nome)
             elif opcao == "3":
-                ver_pedidos(self.db, self.nome)
+                ver_pedidos(self.db, self.nome) 
             elif opcao == "5":
                 ver_mensagens(self.db, self.nome)
             elif opcao == "0":
