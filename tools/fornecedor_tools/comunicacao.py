@@ -1,5 +1,7 @@
 import sqlite3
 
+import sqlite3
+
 def enviar_mensagem(db, nome_fornecedor):
     cursor = db.cursor()
 
@@ -13,40 +15,34 @@ def enviar_mensagem(db, nome_fornecedor):
 
     fornecedor_id = fornecedor[0]
 
-    # Escolher destinatário
-    print("\n=== Enviar Mensagem ===")
-    print("1. Enviar para Cliente")
-    print("2. Enviar para Admin")
-    opcao = input("Escolha a opção: ")
+    # Listar todos os destinatários disponíveis (clientes e admins)
+    cursor.execute("SELECT id, nome, tipo FROM utilizadores")
+    destinatarios = cursor.fetchall()
 
-    if opcao not in ["1", "2"]:
-        print("Opção inválida.")
+    if not destinatarios:
+        print("Nenhum destinatário disponível.")
         return
 
-    # Listar utilizadores para escolher
-    cursor.execute("SELECT id, nome, tipo FROM utilizadores")
-    utilizadores = cursor.fetchall()
-
-    print("\n--- Utilizadores disponíveis ---")
-    for uid, nome, tipo in utilizadores:
+    print("\n--- Destinatários disponíveis ---")
+    for uid, nome, tipo in destinatarios:
         print(f"{uid} - {nome} ({tipo})")
 
     try:
-        destinatario_id = int(input("ID do destinatário: "))
+        destinatario_id = int(input("\nDigite o ID do destinatário: "))
     except ValueError:
         print("ID inválido.")
         return
 
-    # Verificar se existe
-    cursor.execute("SELECT id, nome FROM utilizadores WHERE id = ?", (destinatario_id,))
+    # Verificar se o ID existe
+    cursor.execute("SELECT id, nome, tipo FROM utilizadores WHERE id = ?", (destinatario_id,))
     recebe = cursor.fetchone()
-
     if not recebe:
         print("⚠ Destinatário não encontrado.")
         return
 
     mensagem = input("Digite a mensagem: ")
 
+    # Inserir no banco
     cursor.execute("""
         INSERT INTO mensagens (emissor_id, emissor_tipo, destinatario_id, destinatario_tipo, mensagem)
         VALUES (?, 'fornecedor', ?, 'utilizador', ?)
@@ -54,6 +50,7 @@ def enviar_mensagem(db, nome_fornecedor):
 
     db.commit()
     print("✔ Mensagem enviada com sucesso!")
+
 
 
 def ver_mensagens(db, nome_fornecedor):
