@@ -26,6 +26,7 @@ def remover_produto(db):
         print(f" Produto '{nome}' removido.")
     else:
         print(" Produto não encontrado.")
+        
 #funcao para ver na base de dados os stock 
 def ver_stock(db):
     cursor = db.cursor()
@@ -65,7 +66,7 @@ def verificar_tickets_pendentes(db):
     tickets = cursor.fetchall()
 
     if tickets:
-        print("\n📌 Tickets pendentes de aprovação:")
+        print("\n Tickets pendentes de aprovação:")
         for t in tickets:
             print(f"ID: {t[0]} | Fornecedor: {t[1]} | Produto: {t[2]} | Preço: €{t[3]:.2f} | Stock: {t[4]}")
         print("Aguarda aprovação do admin...\n")
@@ -103,11 +104,15 @@ def aprovar_ticket(db):
     cursor.execute("SELECT fornecedor, produto, preco, stock FROM tickets_produto WHERE id=? AND status='pendente'", (ticket_id,))
     ticket = cursor.fetchone()
     if not ticket:
-        print("❌ Ticket não encontrado ou já processado.")
+        print(" Ticket não encontrado ou já processado.")
         return
 
     fornecedor, produto, preco, stock = ticket
 
+
+    #Obter fornecedor_id
+    cursor.execute("SELECT id FROM fornecedores WHERE nome = ?", (fornecedor,))
+    
     if escolha == "A":
         cursor.execute("INSERT INTO produtos (nome, preco, stock) VALUES (?, ?, ?)", (produto, preco, stock))
         cursor.execute("UPDATE tickets_produto SET status='feito' WHERE id=?", (ticket_id,))
