@@ -48,11 +48,33 @@ def inserir_dados_teste():
     # === Inserir pedidos de teste ===
     cursor.execute("SELECT id FROM utilizadores WHERE nome='Joana'")
     joana_id = cursor.fetchone()[0]
+
     cursor.execute("SELECT id FROM produtos WHERE nome='Tomates Frescos'")
     tomate_id = cursor.fetchone()[0]
+
     cursor.execute(
         "INSERT INTO pedidos (cliente_id, produto_id, quantidade, estado) VALUES (?, ?, ?, ?)",
         (joana_id, tomate_id, 10, "feito")
+    )
+
+    # === Inserir mensagens de teste ===
+
+    # Mensagem: Cliente Joana → Fornecedor AgroVale
+    agrovale_id = fornecedores_dict["AgroVale"]
+    cursor.execute(
+        """INSERT INTO mensagens (emissor_id, emissor_tipo, destinatario_id, destinatario_tipo, mensagem)
+           VALUES (?, 'utilizador', ?, 'fornecedor', ?)""",
+        (joana_id, agrovale_id, "Olá AgroVale, gostaria de saber quando chegam mais cenouras!")
+    )
+
+    # Mensagem: AdminMaster → Fornecedor AgroVale
+    cursor.execute("SELECT id FROM utilizadores WHERE nome='AdminMaster'")
+    admin_id = cursor.fetchone()[0]
+
+    cursor.execute(
+        """INSERT INTO mensagens (emissor_id, emissor_tipo, destinatario_id, destinatario_tipo, mensagem)
+           VALUES (?, 'utilizador', ?, 'fornecedor', ?)""",
+        (admin_id, agrovale_id, "AgroVale, verifiquem o stock dos produtos por favor.")
     )
 
     conn.commit()
