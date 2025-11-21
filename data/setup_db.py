@@ -8,6 +8,7 @@ def resetar_banco():
 
     # Remove todas as tabelas antigas, se existirem
     cursor.executescript("""
+    DROP TABLE IF EXISTS mensagens;
     DROP TABLE IF EXISTS pedidos;
     DROP TABLE IF EXISTS produtos;
     DROP TABLE IF EXISTS fornecedores;
@@ -58,6 +59,19 @@ def resetar_banco():
         estado TEXT CHECK(estado IN ('feito','pago','enviado','entregue')) DEFAULT 'feito',
         FOREIGN KEY (cliente_id) REFERENCES utilizadores(id),
         FOREIGN KEY (produto_id) REFERENCES produtos(id)
+    );
+    ''')
+
+    # === Tabela de mensagens ===
+    cursor.execute('''
+    CREATE TABLE mensagens (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        emissor_id INTEGER NOT NULL,
+        emissor_tipo TEXT CHECK(emissor_tipo IN ('utilizador','fornecedor')) NOT NULL,
+        destinatario_id INTEGER NOT NULL,
+        destinatario_tipo TEXT CHECK(destinatario_tipo IN ('utilizador','fornecedor')) NOT NULL,
+        mensagem TEXT NOT NULL,
+        data TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
     ''')
 
