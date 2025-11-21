@@ -14,7 +14,7 @@ def enviar_mensagem(db, cliente_nome):
     fornecedores = list({f[0] for f in fornecedores1 + fornecedores2})
 
     if not fornecedores:
-        print("❌ Não existem fornecedores registados.")
+        print("Não existem fornecedores registados.")
         return
 
     print("\nFornecedores disponíveis:")
@@ -24,10 +24,10 @@ def enviar_mensagem(db, cliente_nome):
     try:
         escolha = int(input("\nSelecione o número do fornecedor: "))
         if escolha < 1 or escolha > len(fornecedores):
-            print("❌ Escolha inválida.")
+            print(" Escolha inválida.")
             return
     except ValueError:
-        print("❌ Entrada inválida.")
+        print(" Entrada inválida.")
         return
 
     recetor = fornecedores[escolha - 1]

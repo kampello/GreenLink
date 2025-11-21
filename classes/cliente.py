@@ -5,7 +5,7 @@ class Cliente:
     def __init__(self, db_connection, nome):
         self.db = db_connection
         self.nome = nome
-
+    
     def menu(self):
         while True:
             print("\n===== Painel do Cliente =====")
