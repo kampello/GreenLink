@@ -1,9 +1,11 @@
 from tools.cliente_tools.pedidos import ver_pedidos, fazer_pedido, ver_produtos_disponiveis
-from tools.cliente_tools.comunicacao import enviar_mensagem, ver_mensagens
+from tools.cliente_tools.comunicacao import ver_mensagens
 
 class Cliente:
-    def __init__(self, db_connection):
+    def __init__(self, db_connection, nome):
         self.db = db_connection
+        self.nome = nome  # <--- definir o nome do cliente
+
 
 
     def menu(self):
@@ -24,8 +26,6 @@ class Cliente:
                 fazer_pedido(self.db, self.nome)
             elif opcao == "3":
                 ver_pedidos(self.db, self.nome)
-            elif opcao == "4":
-                enviar_mensagem(self.db, self.nome)
             elif opcao == "5":
                 ver_mensagens(self.db, self.nome)
             elif opcao == "0":

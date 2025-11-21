@@ -49,7 +49,7 @@ def login():
             break
         elif tipo_user == "cliente":
             print(f"Bem-vindo, {nome}! Tipo de utilizador: Cliente ")
-            cliente = Cliente(conectar())
+            cliente = Cliente(conectar(), nome)
             cliente.menu()
             break
         elif tipo_user == "fornecedor":
