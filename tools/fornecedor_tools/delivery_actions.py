@@ -21,7 +21,7 @@ def registar_entrega(db, fornecedor_nome):
             print(f"✔ Produto selecionado: {produto}")
             break
         else:
-            print("Esse produto não está listado. Abra um ticket se quiser que seja adicionado!\n")
+            print("[Warning] - Esse produto não está listado. Abra um ticket se quiser que seja adicionado!\n")
 
 
     supermercado = input("Supermercado: ")
