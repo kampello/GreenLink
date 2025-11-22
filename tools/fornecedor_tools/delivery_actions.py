@@ -4,11 +4,25 @@ from datetime import datetime
 
 def registar_entrega(db, fornecedor_nome):
     cursor = db.cursor()
-    cursor.execute("""Select nome from produtos """)
-    produto = cursor.fetchall()
-    for p in produto:
-        print(f"- {p[0]}")
-    produto = input("Produto entregue: ")
+
+    cursor.execute("SELECT nome FROM produtos")
+    # transformar em lista de strings e normalizar espaços
+    produtos = [p[0].strip() for p in cursor.fetchall()]
+
+    print("Produtos disponíveis:")
+    for p in produtos:
+        print(f"- {p}")
+
+    # loop de verificação (case-insensitive)
+    while True:
+        produto = input("Produto entregue: ").strip()
+        # comparar sem diferenciar maiúsculas/minúsculas
+        if produto.lower() in (x.lower() for x in produtos):
+            print(f"✔ Produto selecionado: {produto}")
+            break
+        else:
+            print("Esse produto não está listado. Abra um ticket se quiser que seja adicionado!\n")
+
     supermercado = input("Supermercado: ")
     data_prevista = input("Data prevista (YYYY-MM-DD): ")
 
