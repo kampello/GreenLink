@@ -10,7 +10,7 @@ def enviar_mensagem(db, cliente_nome):
         return
     
     for f in fornecedores:
-        print(f"- {c[0]}")
+        print(f"- {f[0]}")
         
     fornecedor = input("Fornecedor destinatário: ").strip()
     
@@ -27,6 +27,23 @@ def enviar_mensagem(db, cliente_nome):
 def ver_mensagens(db, cliente_nome):
     cursor = db.cursor()
     
+    cursor.execute("""
+    SELECT DISTINCT u.nome
+    FROM mensagens m
+    JOIN utilizadores u ON u.nome = m.remetente
+    WHERE m.destinatario = ? AND u.tipo = 'fornecedor'
+    """, (cliente_nome,))
+    fornecedores = cursor.fetchall()
+    
+    if fornecedores:
+        print("Fornecedores que lhe enviaram mensagem: ")
+        for f in fornecedores:
+            print(f"- {f[0]}")
+    else:
+        print("Sem mensagens de fornecedores:")
+        return
+    
+            
     remetente = input("De que fornecedor pretende ver as mensagens?: ")
     
     cursor.execute(
