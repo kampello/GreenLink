@@ -1,4 +1,12 @@
 def ver_stock(db):
+
+    """
+    Mostra o stock atual de todos os produtos, incluindo preços se disponíveis.
+
+    :param db: Conexão com a base de dados.
+    :type db: sqlite3.Connection
+    """
+
     cursor = db.cursor()
 
     # Descobre as colunas da tabela "produtos"
@@ -48,6 +56,14 @@ def ver_stock(db):
 
 
 def atualizar_stock(db):
+
+    """
+    Atualiza o stock de um produto existente ou adiciona um novo produto.
+
+    :param db: Conexão com a base de dados.
+    :type db: sqlite3.Connection
+    """
+
     cursor = db.cursor()
     produto = input("Nome do produto: ").strip()
 
