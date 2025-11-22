@@ -1,47 +1,41 @@
-import csv
-from datetime import datetime
+import sqlite3
 
 def exportar_relatorio_vendas(db, fornecedor_nome):
     cursor = db.cursor()
 
-    # Pega ID do fornecedor
-    cursor.execute("SELECT id FROM utilizadores WHERE nome=? AND tipo='fornecedor'", (fornecedor_nome,))
-    fornecedor = cursor.fetchone()
-
-    if not fornecedor:
-        print("Fornecedor não encontrado.")
-        return
-
-    fornecedor_id = fornecedor[0]
-
-    # Pega produtos do fornecedor
-    cursor.execute("SELECT id, nome FROM produtos WHERE fornecedor_id=?", (fornecedor_id,))
+    # Pega os produtos que o fornecedor adicionou e que foram aprovados
+    cursor.execute("""
+        SELECT p.id, p.nome, p.preco
+        FROM produtos p
+        JOIN tickets_produto t ON t.produto = p.nome
+        WHERE t.fornecedor=? AND t.status='feito'
+    """, (fornecedor_nome,))
+    
     produtos = cursor.fetchall()
 
     if not produtos:
-        print("Nenhum produto associado a este fornecedor.")
+        print("Nenhum produto encontrado para este fornecedor.")
         return
 
-    produto_ids = [p[0] for p in produtos]
+    print(f"\n===== Relatório de Vendas do fornecedor {fornecedor_nome} =====\n")
+    total_vendas = 0
+    total_receita = 0
 
-    # Busca pedidos relacionados
-    cursor.execute(f"""
-        SELECT pedidos.id, produtos.nome, pedidos.quantidade, pedidos.estado
-        FROM pedidos
-        JOIN produtos ON produtos.id = pedidos.produto_id
-        WHERE produto_id IN ({','.join('?'*len(produto_ids))})
-    """, produto_ids)
+    for prod_id, prod_nome, prod_preco in produtos:
+        cursor.execute("""
+            SELECT SUM(quantidade) FROM pedidos
+            WHERE produto_id=?
+        """, (prod_id,))
+        quantidade = cursor.fetchone()[0] or 0
+        receita = quantidade * prod_preco
 
-    vendas = cursor.fetchall()
+        print(f"Produto: {prod_nome}")
+        print(f"Vendas: {quantidade} pedidos")
+        print(f"Receita: €{receita:.2f}")
+        print("-"*30)
 
-    # Criar ficheiro CSV
-    filename = f"relatorio_vendas_{fornecedor_nome}_{datetime.now().strftime('%Y%m%d')}.csv"
+        total_vendas += quantidade
+        total_receita += receita
 
-    with open(filename, "w", newline="", encoding="utf-8") as f:
-        writer = csv.writer(f)
-        writer.writerow(["ID Pedido", "Produto", "Quantidade", "Estado"])
-
-        for v in vendas:
-            writer.writerow(v)
-
-    print(f"📄 Relatório exportado: {filename}")
+    print(f"Total de vendas: {total_vendas} pedidos")
+    print(f"Receita total: €{total_receita:.2f}")

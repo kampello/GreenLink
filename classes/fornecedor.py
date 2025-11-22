@@ -39,7 +39,7 @@ class Fornecedor:
                 abrir_ticket_produto(self.db, self.nome)
             elif opcao == "7":
                 registar_entrega(self.db, self.nome)
-            elif opcao == "6":
+            elif opcao == "8":
                 exportar_relatorio_vendas(self.db, self.nome)
             elif opcao == "0":
                 print(" Saindo do painel do fornecedor...")
