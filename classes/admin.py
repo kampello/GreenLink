@@ -1,6 +1,7 @@
 from tools.admin_tools.user_manager import criar_utilizador, apagar_utilizador, pesquisar_utilizador
 from tools.admin_tools.product_manager import *
 from tools.admin_tools.delivery_manager import ver_entregas
+from tools.admin_tools.goals_manager import definir_objetivos, ver_objetivos
 
 
 class Admin:
@@ -21,6 +22,7 @@ class Admin:
             print("7. Ver informações de produtos")
             print("8. Aprovar / Negar Ticket")
             print("9. Acompanhar Entrega")
+            print("10. Objetivos Mensais")
             print("0. Sair")
 
             opcao = input("Escolha uma opção: ")
@@ -43,6 +45,8 @@ class Admin:
                     self.aprovar_ticket()
             elif opcao == "9":
                     self.ver_entregas()
+            elif opcao == "10":
+                    self.ver_objetivos()
             elif opcao == "0":
                 print("Saindo do painel de administração...")
                 break
@@ -77,4 +81,10 @@ class Admin:
     
     def ver_entregas(self):
         ver_entregas(self.db)
+
+    def definir_objetivos(self):
+        definir_objetivos(self.db)
+
+    def ver_objetivos(self):
+        ver_objetivos(self.db)
 
