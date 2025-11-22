@@ -4,7 +4,10 @@ from datetime import datetime
 
 def registar_entrega(db, fornecedor_nome):
     cursor = db.cursor()
-
+    cursor.execute("""Select nome from produtos """)
+    produto = cursor.fetchall()
+    for p in produto:
+        print(f"- {p[0]}")
     produto = input("Produto entregue: ")
     supermercado = input("Supermercado: ")
     data_prevista = input("Data prevista (YYYY-MM-DD): ")
