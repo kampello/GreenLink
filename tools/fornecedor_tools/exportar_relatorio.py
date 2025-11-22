@@ -1,41 +1,34 @@
-import sqlite3
-
 def exportar_relatorio_vendas(db, fornecedor_nome):
     cursor = db.cursor()
 
-    # Pega os produtos que o fornecedor adicionou e que foram aprovados
-    cursor.execute("""
-        SELECT p.id, p.nome, p.preco
-        FROM produtos p
-        JOIN tickets_produto t ON t.produto = p.nome
-        WHERE t.fornecedor=? AND t.status='feito'
-    """, (fornecedor_nome,))
-    
+    # Pega todos os produtos (ou apenas os do fornecedor, se tiveres essa info)
+    cursor.execute("SELECT id, nome FROM produtos")
     produtos = cursor.fetchall()
 
-    if not produtos:
-        print("Nenhum produto encontrado para este fornecedor.")
-        return
-
-    print(f"\n===== Relatório de Vendas do fornecedor {fornecedor_nome} =====\n")
     total_vendas = 0
-    total_receita = 0
+    total_receita = 0.0
 
-    for prod_id, prod_nome, prod_preco in produtos:
+    print(f"\n===== Relatório de Vendas - Fornecedor: {fornecedor_nome} =====\n")
+
+    for produto_id, nome in produtos:
+        # JOIN com produtos para pegar o preço
         cursor.execute("""
-            SELECT SUM(quantidade) FROM pedidos
-            WHERE produto_id=?
-        """, (prod_id,))
-        quantidade = cursor.fetchone()[0] or 0
-        receita = quantidade * prod_preco
+            SELECT SUM(pedidos.quantidade), SUM(pedidos.quantidade * produtos.preco)
+            FROM pedidos
+            JOIN produtos ON pedidos.produto_id = produtos.id
+            WHERE pedidos.produto_id = ?
+        """, (produto_id,))
+        result = cursor.fetchone()
+        qtd_vendas = result[0] if result[0] is not None else 0
+        receita = result[1] if result[1] is not None else 0.0
 
-        print(f"Produto: {prod_nome}")
-        print(f"Vendas: {quantidade} pedidos")
+        total_vendas += qtd_vendas
+        total_receita += receita
+
+        print(f"Produto: {nome}")
+        print(f"Vendas: {qtd_vendas} pedidos")
         print(f"Receita: €{receita:.2f}")
         print("-"*30)
 
-        total_vendas += quantidade
-        total_receita += receita
-
     print(f"Total de vendas: {total_vendas} pedidos")
-    print(f"Receita total: €{total_receita:.2f}")
+    print(f"Receita total: €{total_receita:.2f}\n")
