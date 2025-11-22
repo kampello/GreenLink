@@ -24,6 +24,16 @@ def definir_objetivos(db):
 
 
 def ver_objetivos(db):
+    """
+    Exibir todos os objetivos mensais com os valores reais e percentagens de desempenho.
+    :param db: Ligação ativa para a base de dados SQLite.
+    :type db: sqlite3.Connection
+    :returns: None. Imprime os objetivos e respetivos desempenhos no stdout.
+    :rtype: None
+    A função obtém todas as linhas da tabela ``objetivos_mensais`` e apresenta,
+    para cada mês, os valores do objetivo e os valores reais, bem como
+    as percentagens de cumprimento.
+    """
     cursor = db.cursor()
     cursor.execute("SELECT * FROM objetivos_mensais ORDER BY mes")
     rows = cursor.fetchall()
