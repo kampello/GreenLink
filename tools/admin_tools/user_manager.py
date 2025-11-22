@@ -45,6 +45,13 @@ def apagar_utilizador(db):
         print("Utilizador não encontrado.")
 
 def pesquisar_utilizador(db):
+    """
+    Procura utilizadores cujo nome contenha o termo indicado.
+    :param db: Ligação SQLite já aberta.
+    :type db: sqlite3.Connection
+    :returns: Nada. Escreve a lista de resultados no stdout.
+    :rtype:None
+    """
     nome = input("Nome do utilizador a pesquisar: ")
     cursor = db.cursor()
     cursor.execute("SELECT id, nome, tipo FROM utilizadores WHERE nome LIKE ?", (f"%{nome}%",))
