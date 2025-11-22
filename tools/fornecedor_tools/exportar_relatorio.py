@@ -1,4 +1,17 @@
 def exportar_relatorio_vendas(db, fornecedor_nome):
+
+    """
+    Gera e imprime um relatório de vendas dos produtos de um fornecedor.
+
+    Para cada produto, mostra a quantidade vendida e a receita gerada,
+    além do total geral de vendas e receita.
+
+    :param db: Conexão com a base de dados.
+    :type db: sqlite3.Connection
+    :param fornecedor_nome: Nome do fornecedor para o qual gerar o relatório.
+    :type fornecedor_nome: str
+    """
+
     cursor = db.cursor()
 
     # Pega todos os produtos (ou apenas os do fornecedor, se tiveres essa info)
