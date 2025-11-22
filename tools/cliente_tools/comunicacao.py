@@ -26,9 +26,12 @@ def enviar_mensagem(db, cliente_nome):
 
 def ver_mensagens(db, cliente_nome):
     cursor = db.cursor()
+    
+    remetente = input("De que fornecedor pretende ver as mensagens?: ")
+    
     cursor.execute(
-        "SELECT remetente, mensagem FROM mensagens WHERE destinatario = ?",
-        (cliente_nome,)
+        "SELECT remetente, mensagem FROM mensagens WHERE remetente = ? AND destinatario = ?",
+        (remetente, cliente_nome)
     )
     mensagens = cursor.fetchall()
 
