@@ -1,29 +1,44 @@
 def enviar_mensagem(db, fornecedor_nome):
-    cliente = input("Cliente destinatário: ")
+    cursor = db.cursor()
+
+    print("\nClientes disponíveis:")
+    cursor.execute("SELECT nome FROM utilizadores WHERE tipo='cliente'")
+    clientes = cursor.fetchall()
+
+    if not clientes:
+        print("Nenhum cliente registado.")
+        return
+
+    for c in clientes:
+        print(f"- {c[0]}")
+
+    cliente = input("\nCliente destinatário: ").strip()
+
     mensagem = input("Mensagem: ")
 
-    cursor = db.cursor()
-    cursor.execute(
-        "INSERT INTO mensagens (remetente, destinatario, conteudo) VALUES (?, ?, ?)",
-        (fornecedor_nome, cliente, mensagem)
-    )
+    cursor.execute("""
+        INSERT INTO mensagens (remetente, destinatario, mensagem)
+        VALUES (?, ?, ?)
+    """, (fornecedor_nome, cliente, mensagem))
+
     db.commit()
     print(f"Mensagem enviada para {cliente}!")
 
+#ver mensagem
 def ver_mensagens(db, fornecedor_nome):
     cursor = db.cursor()
     cursor.execute(
-        "SELECT remetente, conteudo FROM mensagens WHERE destinatario = ?",
+        "SELECT remetente, mensagem FROM mensagens WHERE destinatario = ?",
         (fornecedor_nome,)
     )
     mensagens = cursor.fetchall()
 
     if mensagens:
         print("\n Mensagens recebidas:")
-        for m in mensagens:
-            print(f"De {m[0]}: {m[1]}")
+        for remetente, texto in mensagens:
+            print(f"• De {remetente}: {texto}")
     else:
-        print(" Nenhuma mensagem nova.")
+        print("\n Nenhuma mensagem nova.")
 
 #abrir um ticket quando o admin fizer login
 def abrir_ticket_produto(db, fornecedor_nome):

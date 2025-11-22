@@ -71,5 +71,14 @@ CREATE TABLE IF NOT EXISTS objetivos_mensais (
 );
 ''')
 
+cursor.execute('''
+    CREATE TABLE mensagens (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        remetente VARCHAR(255) NOT NULL,
+        destinatario VARCHAR(255) NOT NULL,
+        mensagem TEXT NOT NULL,
+        data TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+    ''')
 
 print("Base de dados criada com sucesso!")
