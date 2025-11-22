@@ -27,7 +27,13 @@ def criar_utilizador(db):
         print(f"Erro ao criar utilizador: {e}")
 
 def apagar_utilizador(db):
-    
+    """
+    Remover um utilizador que existe dado o nome.
+    :param db: Ligação SQLite já aberta.
+    :type db: sqlite3.Connection
+    :returns: Nada. Imprime o resultado no stdout.
+    :rtype:None
+    """
     nome = input("Nome do utilizador a apagar: ")
     cursor = db.cursor()
     cursor.execute("DELETE FROM utilizadores WHERE nome = ?", (nome,))
