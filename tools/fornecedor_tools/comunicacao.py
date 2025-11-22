@@ -2,7 +2,7 @@ def enviar_mensagem(db, fornecedor_nome):
     cursor = db.cursor()
 
     print("\nClientes disponíveis:")
-    cursor.execute("SELECT username FROM utilizadores WHERE tipo='cliente'")
+    cursor.execute("SELECT nome FROM utilizadores WHERE tipo='cliente'")
     clientes = cursor.fetchall()
 
     if not clientes:
