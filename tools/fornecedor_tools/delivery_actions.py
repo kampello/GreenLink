@@ -23,6 +23,7 @@ def registar_entrega(db, fornecedor_nome):
         else:
             print("Esse produto não está listado. Abra um ticket se quiser que seja adicionado!\n")
 
+
     supermercado = input("Supermercado: ")
     data_prevista = input("Data prevista (YYYY-MM-DD): ")
 
