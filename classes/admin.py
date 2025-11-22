@@ -23,6 +23,7 @@ class Admin:
             print("8. Aprovar / Negar Ticket")
             print("9. Acompanhar Entrega")
             print("10. Objetivos Mensais")
+            print("11. Definir Objetivos Mensais")
             print("0. Sair")
 
             opcao = input("Escolha uma opção: ")
@@ -47,6 +48,8 @@ class Admin:
                     self.ver_entregas()
             elif opcao == "10":
                     self.ver_objetivos()
+            elif opcao == "11":
+                    self.definir_objetivos()
             elif opcao == "0":
                 print("Saindo do painel de administração...")
                 break
