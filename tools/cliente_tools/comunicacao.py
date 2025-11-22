@@ -27,14 +27,14 @@ def enviar_mensagem(db, cliente_nome):
 def ver_mensagens(db, cliente_nome):
     cursor = db.cursor()
     cursor.execute(
-        "SELECT remetente, conteudo FROM mensagens WHERE destinatario = ?",
+        "SELECT remetente, mensagem FROM mensagens WHERE destinatario = ?",
         (cliente_nome,)
     )
     mensagens = cursor.fetchall()
 
     if mensagens:
-        print("\n💬 Mensagens recebidas:")
-        for m in mensagens:
-            print(f"De {m[0]}: {m[1]}")
+        print("\n Mensagens recebidas:")
+        for remetente, texto in mensagens:
+            print(f"De {remetente}: {texto}")
     else:
-        print("📭 Nenhuma mensagem nova.")
+        print(" Nenhuma mensagem nova.")
