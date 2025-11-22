@@ -1,6 +1,20 @@
 from datetime import datetime
 
 def ver_entregas(db):
+    """
+    Lista de todas as entregas registradas, exibindo datas previstas, datas reais e estado.
+    :param db: Conexão ativa para a base de dados SQLite.
+    :type db: sqlite3.Connection
+    :returns: Nada. Imprime no stdout o acompanhamento completo das entregas.
+    :rtype: None
+    Esta função recupera todos os registros da tabela ``entregas`` e exibe:
+    - produto
+    - fornecedor
+    - supermercado
+    - data prevista
+    - data real (se houver)
+    - estado da entrega (com um indicador visual, entre outras coisas)
+    """
     cursor = db.cursor()
 
     cursor.execute("""
