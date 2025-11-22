@@ -2,7 +2,18 @@ import sqlite3
 
 conn = sqlite3.connect("data/greenlink.db")
 cursor = conn.cursor()
+"""
+Criação da base de dados da aplicação caso ainda não exista.
 
+Tabelas criadas:
+- utilizadores
+- produtos
+- pedidos
+- tickets_produto
+- entregas
+- objetivos_mensais
+- mensagens
+"""
 cursor.execute('''
 CREATE TABLE IF NOT EXISTS utilizadores (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
