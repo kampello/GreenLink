@@ -1,6 +1,16 @@
 import sqlite3
 
 def criar_utilizador(db):
+    """
+        Adiciona um novo utilizador à base de dados.
+        :param db: Ligação ao SQLite já aberta.
+        :type db: sqlite3.Connection
+        :returns: Nothing. Escreve o resultado no stdout.
+        :rtype: None
+        :raises sqlite3.Error: Se ocorrer um erro na inserção do utilizador.
+    
+    """
+    
     nome = input("Nome do novo utilizador: ")
     senha = input("Senha: ")
     tipo = input("Tipo (admin / cliente / fornecedor): ")
@@ -17,6 +27,7 @@ def criar_utilizador(db):
         print(f"Erro ao criar utilizador: {e}")
 
 def apagar_utilizador(db):
+    
     nome = input("Nome do utilizador a apagar: ")
     cursor = db.cursor()
     cursor.execute("DELETE FROM utilizadores WHERE nome = ?", (nome,))
