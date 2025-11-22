@@ -1,26 +1,60 @@
 def enviar_mensagem(db, cliente_nome):
-    fornecedor = input("Fornecedor destinatário: ")
+    cursor = db.cursor()
+    
+    print("\nFornecedores disponíveis: ")
+    cursor.execute("SELECT nome FROM utilizadores WHERE tipo='fornecedor'")
+    fornecedores = cursor.fetchall()
+    
+    if not fornecedores:
+        print("Nenhum fornecedor registado.")
+        return
+    
+    for f in fornecedores:
+        print(f"- {f[0]}")
+        
+    fornecedor = input("Fornecedor destinatário: ").strip()
+    
     mensagem = input("Mensagem: ")
 
-    cursor = db.cursor()
-    cursor.execute(
-        "INSERT INTO mensagens (remetente, destinatario, conteudo) VALUES (?, ?, ?)",
-        (cliente_nome, fornecedor, mensagem)
-    )
+    cursor.execute("""
+        INSERT INTO mensagens (remetente, destinatario, mensagem)
+        VALUES (?, ?, ?)
+    """, (cliente_nome, fornecedor, mensagem))
+    
     db.commit()
-    print(f"📨 Mensagem enviada para {fornecedor}!")
+    print(f" Mensagem enviada para {fornecedor}!")
 
 def ver_mensagens(db, cliente_nome):
     cursor = db.cursor()
+    
+    cursor.execute("""
+    SELECT DISTINCT u.nome
+    FROM mensagens m
+    JOIN utilizadores u ON u.nome = m.remetente
+    WHERE m.destinatario = ? AND u.tipo = 'fornecedor'
+    """, (cliente_nome,))
+    fornecedores = cursor.fetchall()
+    
+    if fornecedores:
+        print("Fornecedores que lhe enviaram mensagem: ")
+        for f in fornecedores:
+            print(f"- {f[0]}")
+    else:
+        print("Sem mensagens de fornecedores:")
+        return
+    
+            
+    remetente = input("De que fornecedor pretende ver as mensagens?: ")
+    
     cursor.execute(
-        "SELECT remetente, conteudo FROM mensagens WHERE destinatario = ?",
-        (cliente_nome,)
+        "SELECT remetente, mensagem FROM mensagens WHERE remetente = ? AND destinatario = ?",
+        (remetente, cliente_nome)
     )
     mensagens = cursor.fetchall()
 
     if mensagens:
-        print("\n💬 Mensagens recebidas:")
-        for m in mensagens:
-            print(f"De {m[0]}: {m[1]}")
+        print("\n Mensagens recebidas:")
+        for remetente, texto in mensagens:
+            print(f"De {remetente}: {texto}")
     else:
-        print("📭 Nenhuma mensagem nova.")
+        print(" Nenhuma mensagem nova.")
