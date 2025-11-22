@@ -18,6 +18,7 @@ class Fornecedor:
             print("5. Ver mensagens recebidas (em desenvolvimento)")
             print("6. Abrir ticket para adicionar novo produto ao admin")
             print("7. Registar entrega")
+            print("8. Exportar relatório de vendas")
             print("0. Sair")
 
 
