@@ -71,5 +71,16 @@ CREATE TABLE IF NOT EXISTS objetivos_mensais (
 );
 ''')
 
+cursor.execute('''
+    CREATE TABLE mensagens (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        emissor_id INTEGER NOT NULL,
+        emissor_tipo TEXT CHECK(emissor_tipo IN ('utilizador','fornecedor')) NOT NULL,
+        destinatario_id INTEGER NOT NULL,
+        destinatario_tipo TEXT CHECK(destinatario_tipo IN ('utilizador','fornecedor')) NOT NULL,
+        mensagem TEXT NOT NULL,
+        data TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+    ''')
 
 print("Base de dados criada com sucesso!")
