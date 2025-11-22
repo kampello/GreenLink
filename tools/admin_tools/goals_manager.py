@@ -20,7 +20,7 @@ def definir_objetivos(db):
         VALUES (?, ?, ?, ?)
     """, (mes, objetivo_producao, objetivo_vendas, objetivo_receita))
     db.commit()
-    print(f"✅ Objetivos para {mes} definidos com sucesso.")
+    print(f"Objetivos para {mes} definidos com sucesso.")
 
 
 def ver_objetivos(db):
