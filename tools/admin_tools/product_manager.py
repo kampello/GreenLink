@@ -186,7 +186,7 @@ def aprovar_ticket(db):
     cursor.execute("SELECT fornecedor, produto, preco, stock FROM tickets_produto WHERE id=? AND status='pendente'", (ticket_id,))
     ticket = cursor.fetchone()
     if not ticket:
-        print("❌ Ticket não encontrado ou já processado.")
+        print("Ticket não encontrado ou já processado.")
         return
 
     fornecedor, produto, preco, stock = ticket
@@ -194,9 +194,9 @@ def aprovar_ticket(db):
     if escolha == "A":
         cursor.execute("INSERT INTO produtos (nome, preco, stock) VALUES (?, ?, ?)", (produto, preco, stock))
         cursor.execute("UPDATE tickets_produto SET status='feito' WHERE id=?", (ticket_id,))
-        print(f"✅ Ticket do produto '{produto}' aprovado e adicionado ao catálogo.")
+        print(f"Ticket do produto '{produto}' aprovado e adicionado ao catálogo.")
     else:
         cursor.execute("UPDATE tickets_produto SET status='rejeitado' WHERE id=?", (ticket_id,))
-        print(f"❌ Ticket do produto '{produto}' rejeitado pelo admin.")
+        print(f"Ticket do produto '{produto}' rejeitado pelo admin.")
 
     db.commit()

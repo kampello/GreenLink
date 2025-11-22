@@ -13,7 +13,7 @@ def ver_pedidos(db, cliente_nome):
         for p in pedidos:
             print(f"ID: {p[0]} | Produto: {p[1]} | Quantidade: {p[2]} | Estado: {p[3]}")
     else:
-        print("⚠️ Nenhum pedido encontrado.")
+        print("[Warning] - Nenhum pedido encontrado.")
 
 def ver_produtos_disponiveis(db):
     cursor = db.cursor()
@@ -25,7 +25,7 @@ def ver_produtos_disponiveis(db):
         for p in produtos:
             print(f"{p[0]} — €{p[1]:.2f} ({p[2]} unidades em stock)")
     else:
-        print("⚠️ Nenhum produto disponível no momento.")
+        print("[Warning] - Nenhum produto disponível no momento.")
 
 def fazer_pedido(db, cliente_nome):
     produto = input("Nome do produto que deseja comprar: ")
@@ -43,4 +43,4 @@ def fazer_pedido(db, cliente_nome):
         db.commit()
         print(f"✅ Pedido do produto '{produto}' criado com sucesso!")
     else:
-        print("❌ Produto inexistente ou stock insuficiente.")
+        print("[Warning] - Produto inexistente ou stock insuficiente.")

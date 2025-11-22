@@ -58,7 +58,7 @@ def ver_mensagens(db, fornecedor_nome):
         for remetente, texto in mensagens:
             print(f"• De {remetente}: {texto}")
     else:
-        print("\n Nenhuma mensagem nova.")
+        print("\n [Warning] - Nenhuma mensagem nova.")
 
 #abrir um ticket quando o admin fizer login
 def abrir_ticket_produto(db, fornecedor_nome):
