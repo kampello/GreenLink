@@ -3,6 +3,19 @@ from datetime import datetime
 from datetime import datetime
 
 def registar_entrega(db, fornecedor_nome):
+
+    """
+    Regista uma entrega de produto feita por um fornecedor.
+
+    Solicita ao fornecedor o produto entregue, o supermercado, a data prevista
+    e calcula automaticamente a data real e o status da entrega (no prazo ou atrasado).
+
+    :param db: Conexão com a base de dados.
+    :type db: sqlite3.Connection
+    :param fornecedor_nome: Nome do fornecedor que realiza a entrega.
+    :type fornecedor_nome: str
+    """
+
     cursor = db.cursor()
 
     cursor.execute("SELECT nome FROM produtos")

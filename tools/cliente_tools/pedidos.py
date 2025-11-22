@@ -1,6 +1,17 @@
 import sqlite3
 
 def ver_pedidos(db, cliente_nome):
+
+    """
+    Mostra todos os pedidos de um cliente.
+
+    :param db: Conexão com a base de dados.
+    :type db: sqlite3.Connection
+    :param cliente_nome: Nome do cliente.
+    :type cliente_nome: str
+    """
+
+
     cursor = db.cursor()
     cursor.execute(
         "SELECT id, produto, quantidade, estado FROM pedidos WHERE cliente = ?",
@@ -16,6 +27,14 @@ def ver_pedidos(db, cliente_nome):
         print("[Warning] - Nenhum pedido encontrado.")
 
 def ver_produtos_disponiveis(db):
+
+    """
+    Lista todos os produtos com stock disponível.
+
+    :param db: Conexão com a base de dados.
+    :type db: sqlite3.Connection
+    """
+
     cursor = db.cursor()
     cursor.execute("SELECT nome, preco, stock FROM produtos WHERE stock > 0")
     produtos = cursor.fetchall()
@@ -28,6 +47,16 @@ def ver_produtos_disponiveis(db):
         print("[Warning] - Nenhum produto disponível no momento.")
 
 def fazer_pedido(db, cliente_nome):
+
+    """
+    Permite a um cliente criar um novo pedido se houver stock suficiente.
+
+    :param db: Conexão com a base de dados.
+    :type db: sqlite3.Connection
+    :param cliente_nome: Nome do cliente que vai fazer o pedido.
+    :type cliente_nome: str
+    """
+
     produto = input("Nome do produto que deseja comprar: ")
     quantidade = int(input("Quantidade: "))
 
