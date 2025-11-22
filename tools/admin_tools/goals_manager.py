@@ -1,5 +1,14 @@
 # tools/admin_tools/goals_manager.py
 def definir_objetivos(db):
+    """
+    Define os objetivos de produção, vendas e receita mensais.
+    :param db: Conexão ativa para a base de dados SQLite.
+    :type db: sqlite3.Connection
+    :returns: Nada. Define os objetivos na base de dados e notifica o utilizador.
+    :rtype: None
+    A função pede ao utilizador o mês do objetivo e os valores dos objetivos,
+    adicionando-os na tabela ``objetivos_mensais``.
+    """
     cursor = db.cursor()
     mes = input("Mês dos objetivos (YYYY-MM): ")
     objetivo_producao = float(input("Objetivo de produção (kg): "))
