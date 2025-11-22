@@ -75,9 +75,7 @@ cursor.execute('''
     CREATE TABLE mensagens (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         remetente VARCHAR(255) NOT NULL,
-        emissor_tipo TEXT CHECK(emissor_tipo IN ('utilizador','fornecedor')) NOT NULL,
         destinatario VARCHAR(255) NOT NULL,
-        destinatario_tipo TEXT CHECK(destinatario_tipo IN ('utilizador','fornecedor')) NOT NULL,
         mensagem TEXT NOT NULL,
         data TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
