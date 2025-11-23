@@ -41,8 +41,9 @@ Ficheiro de funcionalidades de Utilizador
 
 ---
 - [x] Login
-- [ ] Dashboard Cliente Fornecedor
-- [ ] Add: funcionalidade de chat com Cliente x Forncedor
+- [x] Dashboard Cliente Fornecedor
+- [x] Add: funcionalidade de chat com Cliente x Forncedor
+- [x] versão 0.5 🥳🥦
 ---
 > [!NOTE]
 > Esta estrotura ainda pode sofrer algumas mudanças...
