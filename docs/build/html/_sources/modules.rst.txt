@@ -1,8 +1,9 @@
-GreenLink
-=========
+Modules
+=======
 
 .. toctree::
-   :maxdepth: 4
+   :maxdepth: 2
+   :caption: Lista de módulos:
 
    admin
    cliente

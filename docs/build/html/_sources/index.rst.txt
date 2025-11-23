@@ -24,7 +24,6 @@ interna do sistema GreenLink.
    goals_manager
    insert_test_data
    main
-   modules
    pedidos
    product_manager
    produto
@@ -32,3 +31,5 @@ interna do sistema GreenLink.
    stock
    toolbox
    user_manager
+
+   modules
