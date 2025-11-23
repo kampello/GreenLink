@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+
+<html lang="pt" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>comunicacao_Fornecedor &#8212; Documentação GreenLink 0.5</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=27fed22d" />
+    <script src="../_static/documentation_options.js?v=926ee509"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=beaedd51"></script>
+    <link rel="index" title="Índice" href="../genindex.html" />
+    <link rel="search" title="Pesquisar" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Código fonte de comunicacao_Fornecedor</h1><div class="highlight"><pre>
+<div class="viewcode-block" id="enviar_mensagem">
+<a class="viewcode-back" href="../comunicacao_Fornecedor.html#comunicacao_Fornecedor.enviar_mensagem">[documentos]</a>
+<span></span><span class="k">def</span><span class="w"> </span><span class="nf">enviar_mensagem</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">fornecedor_nome</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Envia uma mensagem de um fornecedor para um cliente.</span>
+
+<span class="sd">    :param db: Conexão com a base de dados.</span>
+<span class="sd">    :type db: sqlite3.Connection</span>
+<span class="sd">    :param fornecedor_nome: Nome do fornecedor remetente.</span>
+<span class="sd">    :type fornecedor_nome: str</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">cursor</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Clientes disponíveis:&quot;</span><span class="p">)</span>
+    <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT nome FROM utilizadores WHERE tipo=&#39;cliente&#39;&quot;</span><span class="p">)</span>
+    <span class="n">clientes</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">clientes</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Nenhum cliente registado.&quot;</span><span class="p">)</span>
+        <span class="k">return</span>
+
+    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">clientes</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- </span><span class="si">{</span><span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">cliente</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Cliente destinatário: &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+    <span class="n">mensagem</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Mensagem: &quot;</span><span class="p">)</span>
+
+    <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        INSERT INTO mensagens (remetente, destinatario, mensagem)</span>
+<span class="s2">        VALUES (?, ?, ?)</span>
+<span class="s2">    &quot;&quot;&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">fornecedor_nome</span><span class="p">,</span> <span class="n">cliente</span><span class="p">,</span> <span class="n">mensagem</span><span class="p">))</span>
+
+    <span class="n">db</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Mensagem enviada para </span><span class="si">{</span><span class="n">cliente</span><span class="si">}</span><span class="s2">!&quot;</span><span class="p">)</span></div>
+
+
+<span class="c1">#ver mensagem</span>
+<div class="viewcode-block" id="ver_mensagens">
+<a class="viewcode-back" href="../comunicacao_Fornecedor.html#comunicacao_Fornecedor.ver_mensagens">[documentos]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">ver_mensagens</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">fornecedor_nome</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Mostra mensagens recebidas de clientes e permite selecionar um remetente.</span>
+
+<span class="sd">    :param db: Conexão com a base de dados.</span>
+<span class="sd">    :type db: sqlite3.Connection</span>
+<span class="sd">    :param fornecedor_nome: Nome do fornecedor destinatário.</span>
+<span class="sd">    :type fornecedor_nome: str</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">cursor</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+    <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">    SELECT DISTINCT u.nome</span>
+<span class="s2">    FROM mensagens m</span>
+<span class="s2">    JOIN utilizadores u ON u.nome = m.remetente</span>
+<span class="s2">    WHERE m.destinatario = ? AND u.tipo = &#39;cliente&#39;</span>
+<span class="s2">    &quot;&quot;&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">fornecedor_nome</span><span class="p">,))</span>
+    
+    <span class="n">clientes</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+    
+    <span class="k">if</span> <span class="n">clientes</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Clientes que lhe enviaram mensagem:&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">clientes</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;- </span><span class="si">{</span><span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Sem mensagens de clientes: &quot;</span><span class="p">)</span>
+        <span class="k">return</span>
+    
+    <span class="n">remetente</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;De que cliente pretende ver as mensagens?: &quot;</span><span class="p">)</span>
+        
+    <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+        <span class="s2">&quot;SELECT remetente, mensagem FROM mensagens WHERE remetente = ? AND destinatario = ?&quot;</span><span class="p">,</span>
+        <span class="p">(</span><span class="n">remetente</span><span class="p">,</span> <span class="n">fornecedor_nome</span><span class="p">)</span>
+    <span class="p">)</span>
+        
+    <span class="n">mensagens</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">mensagens</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> Mensagens recebidas:&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">remetente</span><span class="p">,</span> <span class="n">texto</span> <span class="ow">in</span> <span class="n">mensagens</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;• De </span><span class="si">{</span><span class="n">remetente</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">texto</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> [Warning] - Nenhuma mensagem nova.&quot;</span><span class="p">)</span></div>
+
+
+<span class="c1">#abrir um ticket quando o admin fizer login</span>
+<div class="viewcode-block" id="abrir_ticket_produto">
+<a class="viewcode-back" href="../comunicacao_Fornecedor.html#comunicacao_Fornecedor.abrir_ticket_produto">[documentos]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">abrir_ticket_produto</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">fornecedor_nome</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Cria um ticket de produto que será enviado ao administrador.</span>
+
+<span class="sd">    :param db: Conexão com a base de dados.</span>
+<span class="sd">    :type db: sqlite3.Connection</span>
+<span class="sd">    :param fornecedor_nome: Nome do fornecedor que cria o ticket.</span>
+<span class="sd">    :type fornecedor_nome: str</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">nome_produto</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Nome do produto: &quot;</span><span class="p">)</span>
+    <span class="n">preco</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Preço sugerido: &quot;</span><span class="p">))</span>
+    <span class="n">stock</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Quantidade inicial: &quot;</span><span class="p">))</span>
+
+    <span class="n">cursor</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+    <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        INSERT INTO tickets_produto (fornecedor, produto, preco, stock, status)</span>
+<span class="s2">        VALUES (?, ?, ?, ?, ?)</span>
+<span class="s2">    &quot;&quot;&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">fornecedor_nome</span><span class="p">,</span> <span class="n">nome_produto</span><span class="p">,</span> <span class="n">preco</span><span class="p">,</span> <span class="n">stock</span><span class="p">,</span> <span class="s2">&quot;pendente&quot;</span><span class="p">))</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Ticket para &#39;</span><span class="si">{</span><span class="n">nome_produto</span><span class="si">}</span><span class="s2">&#39; enviado ao admin.&quot;</span><span class="p">)</span></div>
+
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">GreenLink</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Ir" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navegação</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Código do módulo</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2025, GreenTeam.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.2.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>
