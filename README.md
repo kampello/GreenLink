@@ -1,52 +1,56 @@
 # 🥦 GreenLink
 
-**GreenLink** é uma aplicação desenvolvida em **Python** por 
+**GreenLink** é uma aplicação desenvolvida em **Python** por
 
 **Paulo Campello @kampello**
-
 **Ricardo Cunha @ricardo6927**
-
 **Gonçalo Maia @DrunkTurkey**
-
 **David Vieira @a44120-droid**
 
- com o objetivo de otimizar a gestão e comercialização de vegetais.  
+com o objetivo de otimizar a gestão e comercialização de vegetais.
 O sistema integra três níveis de utilizadores — **Administrador**, **Cliente** e **Fornecedor** — permitindo uma comunicação eficiente e uma gestão transparente de produtos, pedidos e stocks.
 
 ---
 
 ## Funcionalidades
 
+### Tools ⚒️
 
-### Tools ⚒️ 
-Ficheiro de funcionalidades de Utilizador
--Fornecedor_Tools
--Cliente_Tools
--Fornecedor_Tools
+Ficheiro de funcionalidades de Utilizador:
+
+* Fornecedor_Tools
+* Cliente_Tools
+* Administração_Tools
+
 ### Administrador 👨‍💼👩‍💼
-- Gere contas de utilizadores (clientes e fornecedores)  
-- Adiciona, remove e atualiza produtos e stocks  
-- Supervisiona pedidos e o seu estado  
+
+* Gere contas de utilizadores (clientes e fornecedores)
+* Adiciona, remove e atualiza produtos e stocks
+* Supervisiona pedidos e o seu estado
 
 ### Cliente 🥦
-- Regista-se e realiza login  
-- Efetua pedidos de vegetais  
-- Acompanha o estado de cada pedido (feito, pago, enviado, entregue)  
-- Comunica com o fornecedor  
+
+* Regista-se e realiza login
+* Efetua pedidos de vegetais
+* Acompanha o estado de cada pedido (feito, pago, enviado, entregue)
+* Comunica com o fornecedor
 
 ### Fornecedor
-- Atualiza o stock dos produtos  
-- Consulta e gere pedidos recebidos  
-- Comunica com clientes e confirma entregas  
+
+* Atualiza o stock dos produtos
+* Consulta e gere pedidos recebidos
+* Comunica com clientes e confirma entregas
 
 ---
-- [x] Login
-- [x] Dashboard Cliente Fornecedor
-- [x] Add: funcionalidade de chat com Cliente x Forncedor
-- [x] versão 0.5 🥳🥦
----
+
+* [x] Login
+* [x] Dashboard Cliente / Fornecedor
+* [x] Chat Cliente ↔ Fornecedor
+* [x] Versão 0.5 🥳🥦
+
 > [!NOTE]
-> Esta estrotura ainda pode sofrer algumas mudanças...
+> Esta estrutura ainda pode sofrer algumas mudanças...
+
 ```
 GreenLink/
 │
@@ -59,13 +63,106 @@ GreenLink/
 │   ├── admin_tools/
 │   ├── cliente_tools/
 │   └── fornecedor_tools/
-|   └── Toolbox.py
+│   └── Toolbox.py
 │
 ├── data/
 │   └── greenlink.db
+│   └── setup_db.py
+│   └── insert_test_data.py
+│
+├── tests/
+│   └── test_*.py
 │
 ├── main.py
+├── requirements.txt
 ├── README.md
 └── .gitignore
-
 ```
+
+---
+
+## 🚀 Como correr o código (atualizado — passos exatos incluídos)
+
+### **1. Pré‑requisitos**
+
+* Python 3.10+ instalado
+* `sqlite3` (incluído no Python)
+* `pip` para instalar dependências
+
+### **2. Clonar o repositório**
+
+```bash
+git clone https://github.com/kampello/GreenLink.git
+cd GreenLink
+```
+
+### **3. Ambiente virtual (recomendado)**
+
+```bash
+python -m venv venv
+# Windows:
+venv\Scripts\activate
+# macOS / Linux:
+source venv/bin/activate
+```
+
+### **4. Instalar dependências**
+
+> Se não houver `requirements.txt`, criaremos com as libs necessárias (ex.: `flask`, `rich`, etc.).
+
+```bash
+pip install -r requirements.txt
+```
+
+### **5. Inicializar base de dados**
+
+```bash
+python data/setup_db.py
+```
+
+### **6. Inserir dados de teste**
+
+```bash
+python data/insert_test_data.py
+```
+
+> Nota: os nomes exatos dos ficheiros são `setup_db.py` e `insert_test_data.py` dentro da pasta `data`.
+
+### **7. Executar a aplicação**
+
+```bash
+python main.py
+```
+
+### **8. Testes (opcional)**
+
+Se houver testes unitários em `tests/`:
+
+```bash
+pip install pytest
+pytest -q
+```
+
+---
+
+## ✅ O que acrescentei ao README (resumo)
+
+1. Passos exatos para clonar e correr (incluindo `setup_db.py` e `insert_test_data.py`).
+2. Secção de dependências e `requirements.txt`.
+3. Estrutura de pastas atualizada (incluindo `tests/`).
+4. Comandos para ambiente virtual e execução.
+5. Nota para testes e ficheiros de dados.
+
+---
+
+## 🔧 Troubleshooting rápido
+
+* **Erro: módulo não encontrado** — confirma que ativaste o `venv` e instalaste `requirements.txt`.
+* **Erro: ficheiros não existem** — verifica se estás na raiz do projecto (`GreenLink`) e se as scripts estão em `data/`.
+* **Base de dados vazia** — corre `python data/insert_test_data.py` depois do `setup_db.py`.
+
+---
+
+
+
+
