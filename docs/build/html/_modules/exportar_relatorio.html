@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+
+<html lang="pt" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>exportar_relatorio &#8212; Documentação GreenLink 0.5</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=27fed22d" />
+    <script src="../_static/documentation_options.js?v=926ee509"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=beaedd51"></script>
+    <link rel="index" title="Índice" href="../genindex.html" />
+    <link rel="search" title="Pesquisar" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Código fonte de exportar_relatorio</h1><div class="highlight"><pre>
+<div class="viewcode-block" id="exportar_relatorio_vendas">
+<a class="viewcode-back" href="../exportar_relatorio.html#exportar_relatorio.exportar_relatorio_vendas">[documentos]</a>
+<span></span><span class="k">def</span><span class="w"> </span><span class="nf">exportar_relatorio_vendas</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">fornecedor_nome</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Gera e imprime um relatório de vendas dos produtos de um fornecedor.</span>
+
+<span class="sd">    Para cada produto, mostra a quantidade vendida e a receita gerada,</span>
+<span class="sd">    além do total geral de vendas e receita.</span>
+
+<span class="sd">    :param db: Conexão com a base de dados.</span>
+<span class="sd">    :type db: sqlite3.Connection</span>
+<span class="sd">    :param fornecedor_nome: Nome do fornecedor para o qual gerar o relatório.</span>
+<span class="sd">    :type fornecedor_nome: str</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">cursor</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+
+    <span class="c1"># Pega todos os produtos (ou apenas os do fornecedor, se tiveres essa info)</span>
+    <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT id, nome FROM produtos&quot;</span><span class="p">)</span>
+    <span class="n">produtos</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+
+    <span class="n">total_vendas</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">total_receita</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">===== Relatório de Vendas - Fornecedor: </span><span class="si">{</span><span class="n">fornecedor_nome</span><span class="si">}</span><span class="s2"> =====</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">produto_id</span><span class="p">,</span> <span class="n">nome</span> <span class="ow">in</span> <span class="n">produtos</span><span class="p">:</span>
+        <span class="c1"># JOIN com produtos para pegar o preço</span>
+        <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            SELECT SUM(pedidos.quantidade), SUM(pedidos.quantidade * produtos.preco)</span>
+<span class="s2">            FROM pedidos</span>
+<span class="s2">            JOIN produtos ON pedidos.produto_id = produtos.id</span>
+<span class="s2">            WHERE pedidos.produto_id = ?</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">produto_id</span><span class="p">,))</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
+        <span class="n">qtd_vendas</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="mi">0</span>
+        <span class="n">receita</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="n">result</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="mf">0.0</span>
+
+        <span class="n">total_vendas</span> <span class="o">+=</span> <span class="n">qtd_vendas</span>
+        <span class="n">total_receita</span> <span class="o">+=</span> <span class="n">receita</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Produto: </span><span class="si">{</span><span class="n">nome</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Vendas: </span><span class="si">{</span><span class="n">qtd_vendas</span><span class="si">}</span><span class="s2"> pedidos&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Receita: €</span><span class="si">{</span><span class="n">receita</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="o">*</span><span class="mi">30</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total de vendas: </span><span class="si">{</span><span class="n">total_vendas</span><span class="si">}</span><span class="s2"> pedidos&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Receita total: €</span><span class="si">{</span><span class="n">total_receita</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">GreenLink</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Ir" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navegação</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Código do módulo</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2025, GreenTeam.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.2.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

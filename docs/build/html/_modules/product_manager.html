@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+
+<html lang="pt" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>product_manager &#8212; Documentação GreenLink 0.5</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=27fed22d" />
+    <script src="../_static/documentation_options.js?v=926ee509"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=beaedd51"></script>
+    <link rel="index" title="Índice" href="../genindex.html" />
+    <link rel="search" title="Pesquisar" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Código fonte de product_manager</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">sqlite3</span>
+
+<div class="viewcode-block" id="adicionar_produto">
+<a class="viewcode-back" href="../product_manager.html#product_manager.adicionar_produto">[documentos]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">adicionar_produto</span><span class="p">(</span><span class="n">db</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Adiciona um novo produto à base de dados.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    db : sqlite3.Connection</span>
+<span class="sd">        Conexão ativa com a base de dados SQLite.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    - Solicita ao utilizador o nome, preço e quantidade em stock.</span>
+<span class="sd">    - Insere o produto na tabela `produtos`.</span>
+<span class="sd">    - Caso ocorra erro, mostra a mensagem correspondente.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">nome</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Nome do produto: &quot;</span><span class="p">)</span>
+    <span class="n">preco</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Preço (€): &quot;</span><span class="p">))</span>
+    <span class="n">stock</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Quantidade em stock: &quot;</span><span class="p">))</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">cursor</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+        <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+            <span class="s2">&quot;INSERT INTO produtos (nome, preco, stock) VALUES (?, ?, ?)&quot;</span><span class="p">,</span>
+            <span class="p">(</span><span class="n">nome</span><span class="p">,</span> <span class="n">preco</span><span class="p">,</span> <span class="n">stock</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; Produto &#39;</span><span class="si">{</span><span class="n">nome</span><span class="si">}</span><span class="s2">&#39; adicionado com sucesso!&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">Error</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; Erro ao adicionar produto: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="remover_produto">
+<a class="viewcode-back" href="../product_manager.html#product_manager.remover_produto">[documentos]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">remover_produto</span><span class="p">(</span><span class="n">db</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Remove um produto da base de dados.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    db : sqlite3.Connection</span>
+<span class="sd">        Conexão ativa com a base de dados SQLite.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    - Solicita ao utilizador o nome do produto.</span>
+<span class="sd">    - Remove o produto da tabela `produtos`.</span>
+<span class="sd">    - Informa se o produto foi encontrado ou não.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">nome</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Nome do produto a remover: &quot;</span><span class="p">)</span>
+    <span class="n">cursor</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+    <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;DELETE FROM produtos WHERE nome = ?&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">nome</span><span class="p">,))</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">cursor</span><span class="o">.</span><span class="n">rowcount</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; Produto &#39;</span><span class="si">{</span><span class="n">nome</span><span class="si">}</span><span class="s2">&#39; removido.&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; Produto não encontrado.&quot;</span><span class="p">)</span></div>
+
+<span class="c1">#funcao para ver na base de dados os stock </span>
+<div class="viewcode-block" id="ver_stock">
+<a class="viewcode-back" href="../product_manager.html#product_manager.ver_stock">[documentos]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">ver_stock</span><span class="p">(</span><span class="n">db</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Mostra o stock atual dos produtos.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    db : sqlite3.Connection</span>
+<span class="sd">        Conexão ativa com a base de dados SQLite.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    - Lista todos os produtos com nome, preço e stock.</span>
+<span class="sd">    - Indica se o stock está baixo.</span>
+<span class="sd">    - Mostra o total de produtos em stock.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">cursor</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+    <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT nome, preco, stock FROM produtos ORDER BY nome&quot;</span><span class="p">)</span>
+    <span class="n">produtos</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">produtos</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Stock Atual dos Produtos:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;Produto&#39;</span><span class="si">:</span><span class="s2">&lt;20</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;Preço (€)&#39;</span><span class="si">:</span><span class="s2">&lt;10</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;Stock&#39;</span><span class="si">:</span><span class="s2">&lt;6</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;Status&#39;</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">50</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">nome</span><span class="p">,</span> <span class="n">preco</span><span class="p">,</span> <span class="n">stock</span> <span class="ow">in</span> <span class="n">produtos</span><span class="p">:</span>
+            <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;Baixo&quot;</span> <span class="k">if</span> <span class="n">stock</span> <span class="o">&lt;=</span> <span class="mi">5</span> <span class="k">else</span> <span class="s2">&quot;OK&quot;</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">nome</span><span class="si">:</span><span class="s2">&lt;20</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">preco</span><span class="si">:</span><span class="s2">&lt;10.2f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">stock</span><span class="si">:</span><span class="s2">&lt;6</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">status</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">total_produtos</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="n">p</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">produtos</span><span class="p">])</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Total de produtos em stock: </span><span class="si">{</span><span class="n">total_produtos</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Nenhum produto registado.&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="ver_informacoes_produtos">
+<a class="viewcode-back" href="../product_manager.html#product_manager.ver_informacoes_produtos">[documentos]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">ver_informacoes_produtos</span><span class="p">(</span><span class="n">db</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Lista todos os produtos com informações detalhadas.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    db : sqlite3.Connection</span>
+<span class="sd">        Conexão ativa com a base de dados SQLite.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    - Mostra ID, nome, preço e stock de cada produto.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">cursor</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+    <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT id, nome, preco, stock FROM produtos&quot;</span><span class="p">)</span>
+    <span class="n">produtos</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">produtos</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> Lista de Produtos:&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">produtos</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ID: </span><span class="si">{</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> | Nome: </span><span class="si">{</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2"> | Preço: €</span><span class="si">{</span><span class="n">p</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> | Stock: </span><span class="si">{</span><span class="n">p</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Nenhum produto encontrado.&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="verificar_tickets_pendentes">
+<a class="viewcode-back" href="../product_manager.html#product_manager.verificar_tickets_pendentes">[documentos]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">verificar_tickets_pendentes</span><span class="p">(</span><span class="n">db</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Verifica tickets de produtos pendentes de aprovação.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    db : sqlite3.Connection</span>
+<span class="sd">        Conexão ativa com a base de dados SQLite.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    - Lista todos os tickets com status &#39;pendente&#39;.</span>
+<span class="sd">    - Mostra fornecedor, produto, preço e stock.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">cursor</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+    <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT id, fornecedor, produto, preco, stock FROM tickets_produto WHERE status=&#39;pendente&#39;&quot;</span><span class="p">)</span>
+    <span class="n">tickets</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">tickets</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">📌 Tickets pendentes de aprovação:&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tickets</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ID: </span><span class="si">{</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> | Fornecedor: </span><span class="si">{</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2"> | Produto: </span><span class="si">{</span><span class="n">t</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">}</span><span class="s2"> | Preço: €</span><span class="si">{</span><span class="n">t</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> | Stock: </span><span class="si">{</span><span class="n">t</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Aguarda aprovação do admin...</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Nenhum ticket pendente no momento.&quot;</span><span class="p">)</span></div>
+
+
+
+
+<div class="viewcode-block" id="aprovar_ticket">
+<a class="viewcode-back" href="../product_manager.html#product_manager.aprovar_ticket">[documentos]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">aprovar_ticket</span><span class="p">(</span><span class="n">db</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Aprova ou rejeita tickets pendentes.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    db : sqlite3.Connection</span>
+<span class="sd">        Conexão ativa com a base de dados SQLite.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    - Lista todos os tickets pendentes.</span>
+<span class="sd">    - Permite ao admin aprovar (A) ou negar (N).</span>
+<span class="sd">    - Se aprovado, adiciona o produto à tabela `produtos`.</span>
+<span class="sd">    - Atualiza o status do ticket para &#39;feito&#39; ou &#39;rejeitado&#39;.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">cursor</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+
+    <span class="c1"># Pega todos os tickets pendentes</span>
+    <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT id, fornecedor, produto, preco, stock FROM tickets_produto WHERE status=&#39;pendente&#39;&quot;</span><span class="p">)</span>
+    <span class="n">tickets</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">tickets</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Nenhum ticket pendente no momento.&quot;</span><span class="p">)</span>
+        <span class="k">return</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Tickets pendentes:&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tickets</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ID: </span><span class="si">{</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> | Fornecedor: </span><span class="si">{</span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2"> | Produto: </span><span class="si">{</span><span class="n">t</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">}</span><span class="s2"> | Preço: €</span><span class="si">{</span><span class="n">t</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> | Stock: </span><span class="si">{</span><span class="n">t</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">escolha</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Deseja Aprovar ou Negar? - (A/N): &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">escolha</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;N&quot;</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Opção inválida.&quot;</span><span class="p">)</span>
+        <span class="k">return</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">ticket_id</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Digite o ID do ticket que deseja processar: &quot;</span><span class="p">))</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ID inválido.&quot;</span><span class="p">)</span>
+        <span class="k">return</span>
+
+    <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT fornecedor, produto, preco, stock FROM tickets_produto WHERE id=? AND status=&#39;pendente&#39;&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">ticket_id</span><span class="p">,))</span>
+    <span class="n">ticket</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">ticket</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Ticket não encontrado ou já processado.&quot;</span><span class="p">)</span>
+        <span class="k">return</span>
+
+    <span class="n">fornecedor</span><span class="p">,</span> <span class="n">produto</span><span class="p">,</span> <span class="n">preco</span><span class="p">,</span> <span class="n">stock</span> <span class="o">=</span> <span class="n">ticket</span>
+
+    <span class="k">if</span> <span class="n">escolha</span> <span class="o">==</span> <span class="s2">&quot;A&quot;</span><span class="p">:</span>
+        <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;INSERT INTO produtos (nome, preco, stock) VALUES (?, ?, ?)&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">produto</span><span class="p">,</span> <span class="n">preco</span><span class="p">,</span> <span class="n">stock</span><span class="p">))</span>
+        <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;UPDATE tickets_produto SET status=&#39;feito&#39; WHERE id=?&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">ticket_id</span><span class="p">,))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Ticket do produto &#39;</span><span class="si">{</span><span class="n">produto</span><span class="si">}</span><span class="s2">&#39; aprovado e adicionado ao catálogo.&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;UPDATE tickets_produto SET status=&#39;rejeitado&#39; WHERE id=?&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">ticket_id</span><span class="p">,))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Ticket do produto &#39;</span><span class="si">{</span><span class="n">produto</span><span class="si">}</span><span class="s2">&#39; rejeitado pelo admin.&quot;</span><span class="p">)</span>
+
+    <span class="n">db</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span></div>
+
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">GreenLink</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Ir" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navegação</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Código do módulo</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2025, GreenTeam.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.2.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

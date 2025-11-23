@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+
+<html lang="pt" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>toolbox &#8212; Documentação GreenLink 0.5</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=27fed22d" />
+    <script src="../_static/documentation_options.js?v=926ee509"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=beaedd51"></script>
+    <link rel="index" title="Índice" href="../genindex.html" />
+    <link rel="search" title="Pesquisar" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Código fonte de toolbox</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w">  </span><span class="nn">os</span><span class="o">,</span><span class="w"> </span><span class="nn">getpass</span><span class="o">,</span><span class="w"> </span><span class="nn">msvcrt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">colorama</span><span class="w"> </span><span class="kn">import</span> <span class="n">Fore</span><span class="p">,</span> <span class="n">Back</span><span class="p">,</span> <span class="n">Style</span><span class="p">,</span> <span class="n">init</span>
+
+<span class="c1">#limpar tela funcao</span>
+<span class="n">clear</span> <span class="o">=</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s1">&#39;clear&#39;</span><span class="p">)</span>
+<span class="c1">#logo da greenLink</span>
+<span class="n">logo</span> <span class="o">=</span> <span class="k">lambda</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;</span><span class="se">\033</span><span class="s1">[92m</span>
+<span class="s1">  _____                     _      _       _    </span>
+<span class="s1"> / ____|                   | |    (_)     | |   </span>
+<span class="s1">| |  __ _ __ ___  ___ _ __ | |     _ _ __ | | __</span>
+<span class="s1">| | |_ | &#39;__/ _ \/ _ \ &#39;_ \| |    | | &#39;_ \| |/ /</span>
+<span class="s1">| |__| | | |  __/  __/ | | | |____| | | | |   &lt; </span>
+<span class="s1"> \_____|_|  \___|\___|_| |_|______|_|_| |_|_|\_</span><span class="se">\\</span>
+<span class="se">\033</span><span class="s1">[33m      we love broccoli™</span>
+<span class="se">\033</span><span class="s1">[0m&#39;&#39;&#39;</span><span class="p">)</span>
+
+
+
+<span class="c1">#funcao feita pra que quando o utlizador escreva a senha apareca &#39;*&#39; em vez de a senha atual</span>
+
+<div class="viewcode-block" id="input_senha">
+<a class="viewcode-back" href="../toolbox.html#toolbox.input_senha">[documentos]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">input_senha</span><span class="p">(</span><span class="n">prompt</span><span class="o">=</span><span class="s2">&quot;Senha: &quot;</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">prompt</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">senha</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">ch</span> <span class="o">=</span> <span class="n">msvcrt</span><span class="o">.</span><span class="n">getch</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">ch</span> <span class="o">==</span> <span class="sa">b</span><span class="s1">&#39;</span><span class="se">\r</span><span class="s1">&#39;</span><span class="p">:</span>  <span class="c1"># Enter</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+            <span class="k">break</span>
+        <span class="k">elif</span> <span class="n">ch</span> <span class="o">==</span> <span class="sa">b</span><span class="s1">&#39;</span><span class="se">\x08</span><span class="s1">&#39;</span><span class="p">:</span>  <span class="c1"># Backspace</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">senha</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">senha</span> <span class="o">=</span> <span class="n">senha</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\b</span><span class="s1"> </span><span class="se">\b</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">ch</span> <span class="o">==</span> <span class="sa">b</span><span class="s1">&#39;</span><span class="se">\x03</span><span class="s1">&#39;</span><span class="p">:</span>  <span class="c1"># Ctrl+C</span>
+            <span class="k">raise</span> <span class="ne">KeyboardInterrupt</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">senha</span> <span class="o">+=</span> <span class="n">ch</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;*&#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">senha</span></div>
+
+
+
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">GreenLink</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Ir" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navegação</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Código do módulo</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2025, GreenTeam.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.2.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>
