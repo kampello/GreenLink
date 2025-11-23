@@ -136,7 +136,7 @@ python main.py
 
 ### **8. Testes (opcional)**
 
-Se houver testes unitários em `tests/`:
+Se houver testes unitários use a branch `test`:
 
 ```bash
 pip install pytest
@@ -149,7 +149,7 @@ pytest -q
 
 1. Passos exatos para clonar e correr (incluindo `setup_db.py` e `insert_test_data.py`).
 2. Secção de dependências e `requirements.txt`.
-3. Estrutura de pastas atualizada (incluindo `tests/`).
+3. Estrutura de pastas atualizada.
 4. Comandos para ambiente virtual e execução.
 5. Nota para testes e ficheiros de dados.
 
