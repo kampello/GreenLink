@@ -1,4 +1,14 @@
 def enviar_mensagem(db, cliente_nome):
+
+    """
+    Envia uma mensagem de um cliente para um fornecedor.
+
+    :param db: Conexão com a base de dados.
+    :type db: sqlite3.Connection
+    :param cliente_nome: Nome do cliente remetente.
+    :type cliente_nome: str
+    """
+
     cursor = db.cursor()
     
     print("\nFornecedores disponíveis: ")
@@ -25,6 +35,16 @@ def enviar_mensagem(db, cliente_nome):
     print(f" Mensagem enviada para {fornecedor}!")
 
 def ver_mensagens(db, cliente_nome):
+
+    """
+    Mostra mensagens recebidas de fornecedores e permite selecionar um remetente.
+
+    :param db: Conexão com a base de dados.
+    :type db: sqlite3.Connection
+    :param cliente_nome: Nome do cliente destinatário.
+    :type cliente_nome: str
+    """
+
     cursor = db.cursor()
     
     cursor.execute("""

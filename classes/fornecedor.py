@@ -4,12 +4,51 @@ from tools.fornecedor_tools.delivery_actions import registar_entrega
 from tools.fornecedor_tools.exportar_relatorio import exportar_relatorio_vendas
 
 
-class Fornecedor:
+class Fornecedor: 
+    """
+        Representa um fornecedor no sistema GreenLink.
+
+        Esta classe fornece um painel interativo para que o fornecedor:
+        - Veja pedidos recebidos
+        - Atualize e consulte stock de produtos
+        - Envie e receba mensagens de clientes
+        - Abra tickets para adicionar novos produtos
+        - Registe entregas
+        - Exporte relatórios de vendas
+
+        :param db_connection: Conexão com a base de dados SQLite
+        :type db_connection: sqlite3.Connection
+        :param nome: Nome do fornecedor
+        :type nome: str
+    """
     def __init__(self, db_connection, nome):
         self.db = db_connection
         self.nome = nome
 
     def menu(self):
+        """
+        Exibe o menu interativo do fornecedor no terminal.
+
+        O menu oferece as seguintes opções:
+
+        1. Ver pedidos recebidos (em desenvolvimento)
+        2. Atualizar stock de produtos (em desenvolvimento: falta mostrar o preço)
+        3. Ver stock atual (em desenvolvimento)
+        4. Enviar mensagem ao cliente (em desenvolvimento)
+        5. Ver mensagens recebidas (em desenvolvimento)
+        6. Abrir ticket para adicionar novo produto ao admin
+        7. Registar entrega
+        8. Exportar relatório de vendas
+        0. Sair
+
+        O método permanece em loop até o utilizador escolher "0" para sair.
+
+        Cada opção chama a função correspondente importada de:
+        - tools.fornecedor_tools.stock
+        - tools.fornecedor_tools.comunicacao
+        - tools.fornecedor_tools.delivery_actions
+        - tools.fornecedor_tools.exportar_relatorio
+        """
         while True:
             print("\n===== Painel do Fornecedor =====")
             print("1. Ver pedidos recebidos (em desenvolvimento)")
@@ -46,4 +85,3 @@ class Fornecedor:
                 break
             else:
                 print(" Opção inválida, tente novamente.")
-#fazer as coisas amanha dia 13 

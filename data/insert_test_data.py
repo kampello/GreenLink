@@ -1,3 +1,14 @@
+"""
+Insere dados de teste na base de dados para facilitar o desenvolvimento.
+
+Inclui:
+- utilizadores (admin, cliente, fornecedor)
+- produtos iniciais
+- tickets de produto (feitos e pendentes)
+- pedidos simulados
+
+Os dados são inseridos apenas para ambiente de testes.
+"""
 import sqlite3
 
 conn = sqlite3.connect("data/greenlink.db")
@@ -32,4 +43,4 @@ cursor.executemany("INSERT INTO pedidos (cliente_id, produto_id, quantidade, est
 conn.commit()
 conn.close()
 
-print("🌱 Dados de teste inseridos com sucesso!")
+print("Dados de teste inseridos com sucesso!")

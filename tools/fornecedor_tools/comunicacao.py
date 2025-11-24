@@ -1,4 +1,14 @@
 def enviar_mensagem(db, fornecedor_nome):
+
+    """
+    Envia uma mensagem de um fornecedor para um cliente.
+
+    :param db: Conexão com a base de dados.
+    :type db: sqlite3.Connection
+    :param fornecedor_nome: Nome do fornecedor remetente.
+    :type fornecedor_nome: str
+    """
+
     cursor = db.cursor()
 
     print("\nClientes disponíveis:")
@@ -26,6 +36,16 @@ def enviar_mensagem(db, fornecedor_nome):
 
 #ver mensagem
 def ver_mensagens(db, fornecedor_nome):
+
+    """
+    Mostra mensagens recebidas de clientes e permite selecionar um remetente.
+
+    :param db: Conexão com a base de dados.
+    :type db: sqlite3.Connection
+    :param fornecedor_nome: Nome do fornecedor destinatário.
+    :type fornecedor_nome: str
+    """
+
     cursor = db.cursor()
     cursor.execute("""
     SELECT DISTINCT u.nome
@@ -58,10 +78,20 @@ def ver_mensagens(db, fornecedor_nome):
         for remetente, texto in mensagens:
             print(f"• De {remetente}: {texto}")
     else:
-        print("\n Nenhuma mensagem nova.")
+        print("\n [Warning] - Nenhuma mensagem nova.")
 
 #abrir um ticket quando o admin fizer login
 def abrir_ticket_produto(db, fornecedor_nome):
+
+    """
+    Cria um ticket de produto que será enviado ao administrador.
+
+    :param db: Conexão com a base de dados.
+    :type db: sqlite3.Connection
+    :param fornecedor_nome: Nome do fornecedor que cria o ticket.
+    :type fornecedor_nome: str
+    """
+
     nome_produto = input("Nome do produto: ")
     preco = float(input("Preço sugerido: "))
     stock = int(input("Quantidade inicial: "))
